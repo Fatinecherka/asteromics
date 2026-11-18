@@ -123,8 +123,11 @@ export function startRouter() {
     navigate(window.location.pathname, { replace: true, scroll: true })
   })
 
-  const initial = matchRoute(window.location.pathname)
-  if (normalizePath(window.location.pathname) !== initial.path) {
+  const rawPath = window.location.pathname
+  const initial = matchRoute(rawPath)
+  const trimmed =
+    rawPath.length > 1 && rawPath.endsWith('/') ? rawPath.slice(0, -1) : rawPath || '/'
+  if (trimmed !== initial.path) {
     history.replaceState({ path: initial.path }, '', initial.path)
   }
   renderRoute(initial, { scroll: false })

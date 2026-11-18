@@ -1,3 +1,4 @@
+import { mountContactForm } from '../contact-form.js'
 import { mountNewsletter } from '../newsletter.js'
 
 export const meta = {
@@ -13,6 +14,7 @@ const html = `
       <p class="eyebrow reveal">Contact</p>
       <h1 class="reveal">Request a first consultation</h1>
       <p class="lede reveal">Please include the biological question, the data available or planned, and your deadline. If it is not something we can help with, we will say so.</p>
+      <div id="contact-form" class="reveal"></div>
       <a class="mail reveal" href="mailto:contact@asteromics.com">contact@asteromics.com</a>
     </div>
   </section>
@@ -29,6 +31,7 @@ export function render(container) {
 }
 
 export function mount() {
+  mountContactForm(document.getElementById('contact-form'))
   mountNewsletter(document.getElementById('newsletter'))
 }
 
