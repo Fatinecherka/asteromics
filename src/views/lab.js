@@ -8,7 +8,7 @@ import { initEventsSlider } from '../events-slider.js'
 export const meta = {
   title: 'Lab | AsterOmics',
   description:
-    'An experimental walkthrough of AsterOmics organized like a laboratory: benches, beakers, imaging, and consultation.',
+    'Walk AsterOmics like a laboratory: wet bench, analysis bay, imaging core, seminar wall, and consultation desk.',
 }
 
 export const id = 'lab'
@@ -63,12 +63,38 @@ const BEAKERS = [
   },
 ]
 
+const TILE_FIXTURES = {
+  bench: `
+    <span class="lab-map-fixture lab-map-fixture-bench" aria-hidden="true">
+      <span class="lab-map-fixture-slab"></span>
+      <span class="lab-map-fixture-slab"></span>
+    </span>`,
+  analysis: `
+    <span class="lab-map-fixture lab-map-fixture-rack" aria-hidden="true">
+      <span></span><span></span><span></span>
+    </span>`,
+  imaging: `
+    <span class="lab-map-fixture lab-map-fixture-scope" aria-hidden="true">
+      <span class="lab-map-fixture-scope-ring"></span>
+    </span>`,
+  seminar: `
+    <span class="lab-map-fixture lab-map-fixture-seats" aria-hidden="true">
+      <span></span><span></span><span></span>
+    </span>`,
+  desk: `
+    <span class="lab-map-fixture lab-map-fixture-desk" aria-hidden="true">
+      <span class="lab-map-fixture-desk-top"></span>
+      <span class="lab-map-fixture-chair"></span>
+    </span>`,
+}
+
 function stationButtons() {
   return STATIONS.map(
     (s) => `
-      <button type="button" class="lab-station-btn" data-go-station="${s.id}" aria-controls="lab-panel-${s.id}">
+      <button type="button" class="lab-station-btn" data-go-station="${s.id}" aria-controls="lab-panel-${s.id}" title="${s.zone}">
         <span class="lab-station-btn-zone">${s.zone}</span>
         <span class="lab-station-btn-label">${s.label}</span>
+        <span class="lab-station-btn-hint">${s.zone}</span>
       </button>`,
   ).join('')
 }
@@ -77,16 +103,19 @@ function mapTiles() {
   return STATIONS.map(
     (s) => `
       <button type="button" class="lab-map-tile" data-go-station="${s.id}" data-tile="${s.id}">
-        <span class="lab-map-tile-mark" aria-hidden="true"></span>
-        <span class="lab-map-tile-zone">${s.zone}</span>
-        <span class="lab-map-tile-label">${s.label}</span>
+        <span class="lab-map-tile-door" aria-hidden="true"></span>
+        ${TILE_FIXTURES[s.id] || ''}
+        <span class="lab-map-tile-copy">
+          <span class="lab-map-tile-zone">${s.zone}</span>
+          <span class="lab-map-tile-label">${s.label}</span>
+        </span>
       </button>`,
   ).join('')
 }
 
 function beakerMarkup(b) {
   return `
-    <div class="lab-beaker" data-beaker="${b.id}" data-fill="${b.fill}">
+    <div class="lab-beaker" role="listitem" data-beaker="${b.id}" data-fill="${b.fill}">
       <button type="button" class="lab-beaker-hit" data-open-beaker="${b.id}" aria-expanded="false" aria-controls="lab-beaker-panel-${b.id}">
         <span class="lab-beaker-glass" aria-hidden="true">
           <span class="lab-beaker-stopper"></span>
@@ -98,8 +127,8 @@ function beakerMarkup(b) {
         </span>
         <span class="lab-beaker-name">${b.label}</span>
       </button>
-      <div class="lab-beaker-panel" id="lab-beaker-panel-${b.id}" hidden>
-        <div class="lab-beaker-panel-inner">
+      <div class="lab-beaker-panel" id="lab-beaker-panel-${b.id}" role="region" aria-label="${b.label} services" hidden>
+        <div class="lab-beaker-panel-inner" tabindex="-1">
           <p class="lab-beaker-panel-eyebrow">Reagent · ${b.reagent}</p>
           <h3>${b.label}</h3>
           <ul>
@@ -126,11 +155,17 @@ const html = `
         </div>
         <div class="lab-entrance-bench-glow"></div>
       </div>
+      <div class="lab-entrance-atmosphere" aria-hidden="true">
+        <span class="lab-entrance-particle"></span>
+        <span class="lab-entrance-particle"></span>
+        <span class="lab-entrance-particle"></span>
+        <span class="lab-entrance-particle"></span>
+      </div>
       <div class="lab-entrance-copy">
         <div class="wrap">
-          <p class="lab-eyebrow">Experimental prototype</p>
+          <p class="lab-eyebrow">Laboratory</p>
           <h1 class="lab-brand">Aster<span class="lab-brand-o">O</span>mics</h1>
-          <p class="lab-entrance-lede">From biological question to omics answer — organized like the lab that asks it.</p>
+          <p class="lab-entrance-lede">From biological question to omics answer, organized like the lab that asks it.</p>
           <div class="lab-entrance-actions">
             <button type="button" class="lab-cta" data-enter-lab>Step inside</button>
             <a class="lab-back-site" href="/">Return to the site</a>
@@ -152,18 +187,60 @@ const html = `
       <div class="wrap">
         <p class="lab-eyebrow">Floor plan</p>
         <h2 class="lab-map-title">Choose a station</h2>
-        <p class="lab-map-lede">Five zones, one practice — wet bench, analysis bay, imaging core, seminar wall, consultation desk.</p>
-        <div class="lab-map-grid">
-          ${mapTiles()}
+        <p class="lab-map-lede">Five zones, one practice: wet bench, analysis bay, imaging core, seminar wall, consultation desk.</p>
+        <div class="lab-floorplan" role="group" aria-label="Schematic lab floor plan">
+          <div class="lab-floorplan-frame">
+            <div class="lab-floorplan-north" aria-hidden="true">
+              <span class="lab-floorplan-compass">N</span>
+              <span class="lab-floorplan-scale"><i></i> 4 m</span>
+            </div>
+            <div class="lab-floorplan-entry" aria-hidden="true">
+              <span class="lab-floorplan-entry-label">Entry</span>
+            </div>
+            <div class="lab-map-grid">
+              ${mapTiles()}
+            </div>
+            <div class="lab-floorplan-hall" aria-hidden="true">
+              <span class="lab-floorplan-hall-line"></span>
+            </div>
+            <div class="lab-walkers" aria-hidden="true">
+              <span class="lab-walker lab-walker-a"><i></i><i></i></span>
+              <span class="lab-walker lab-walker-b"><i></i><i></i></span>
+              <span class="lab-walker lab-walker-c"><i></i><i></i></span>
+            </div>
+          </div>
         </div>
         <div class="lab-shelf" aria-label="Affiliations">
           <p class="lab-shelf-title">Shelf · affiliations</p>
-          <div class="lab-shelf-bottles">
-            <span class="lab-bottle">GIGA-Cancer</span>
-            <span class="lab-bottle">ULiège</span>
-            <span class="lab-bottle">Maryland</span>
-            <span class="lab-bottle">Vienna</span>
-            <span class="lab-bottle">Brown</span>
+          <div class="lab-shelf-logos logos">
+            <div class="logo">
+              <img src="/assets/logos/giga-cancer.svg" alt="GIGA-Cancer" loading="lazy" onerror="this.remove()">
+              <span>GIGA-Cancer</span>
+            </div>
+            <div class="logo">
+              <img src="/assets/logos/uliege.svg" alt="University of Liège" loading="lazy" onerror="this.remove()">
+              <span>University of Liège</span>
+            </div>
+            <div class="logo">
+              <img src="/assets/logos/umaryland.png" alt="University of Maryland, Baltimore" loading="lazy" onerror="this.remove()">
+              <span>University of Maryland, Baltimore</span>
+            </div>
+            <div class="logo">
+              <img src="/assets/logos/vienna.svg" alt="University of Vienna" loading="lazy" onerror="this.remove()">
+              <span>University of Vienna</span>
+            </div>
+            <div class="logo">
+              <img src="/assets/logos/brown.svg" alt="Brown University" loading="lazy" onerror="this.remove()">
+              <span>Brown University</span>
+            </div>
+            <div class="logo">
+              <img src="/assets/logos/lyon-sud.svg" alt="Hôpital Lyon Sud" loading="lazy" onerror="this.remove()">
+              <span>Hôpital Lyon Sud</span>
+            </div>
+            <div class="logo">
+              <img src="/assets/logos/vetagro-sup.png" alt="VetAgro Sup" loading="lazy" onerror="this.remove()">
+              <span>VetAgro Sup</span>
+            </div>
           </div>
         </div>
       </div>
@@ -203,7 +280,7 @@ const html = `
         <header class="lab-panel-head">
           <p class="lab-eyebrow">Analysis bay</p>
           <h2>Open a reagent</h2>
-          <p class="lab-panel-lede">Projects can start at any stage — including after the data has been generated. Lift a stopper to read the protocol.</p>
+          <p class="lab-panel-lede">Projects can start at any stage, including after the data has been generated. Lift a stopper to read the protocol.</p>
         </header>
         <div class="lab-beaker-rack" role="list">
           ${BEAKERS.map(beakerMarkup).join('')}
@@ -220,7 +297,7 @@ const html = `
         <header class="lab-panel-head">
           <p class="lab-eyebrow">Imaging core</p>
           <h2>Field of view</h2>
-          <p class="lab-panel-lede">Rack focus and switch illumination — brightfield by day, darkfield by night.</p>
+          <p class="lab-panel-lede">Rack focus and switch illumination: brightfield by day, darkfield by night.</p>
         </header>
         <div class="lab-imaging-stage">
           <div class="lab-fov">
@@ -259,12 +336,14 @@ const html = `
             Impact Hub Antwerp: stage, conversations and the company table.
           </p>
           <div class="lab-seminar-slider after">
-            <div class="slider" id="slider">
-              <div class="track" id="track"></div>
-              <button class="snav prev" id="s-prev" type="button" aria-label="Previous">‹</button>
-              <button class="snav next" id="s-next" type="button" aria-label="Next">›</button>
+            <div class="lab-seminar-frame">
+              <div class="slider" id="slider">
+                <div class="track" id="track"></div>
+                <button class="snav prev" id="s-prev" type="button" aria-label="Previous">‹</button>
+                <button class="snav next" id="s-next" type="button" aria-label="Next">›</button>
+              </div>
+              <div class="dots" id="dots" role="tablist" aria-label="Event images"></div>
             </div>
-            <div class="dots" id="dots" role="tablist" aria-label="Event images"></div>
           </div>
         </div>
         <div class="lab-seminar-talk">

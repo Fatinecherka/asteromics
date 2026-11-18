@@ -71,6 +71,14 @@ const html = `
           <img src="/assets/logos/brown.svg" alt="Brown University" loading="lazy" onerror="this.remove()">
           <span>Brown University</span>
         </div>
+        <div class="logo">
+          <img src="/assets/logos/lyon-sud.svg" alt="Hôpital Lyon Sud" loading="lazy" onerror="this.remove()">
+          <span>Hôpital Lyon Sud</span>
+        </div>
+        <div class="logo">
+          <img src="/assets/logos/vetagro-sup.png" alt="VetAgro Sup" loading="lazy" onerror="this.remove()">
+          <span>VetAgro Sup</span>
+        </div>
       </div>
     </div>
     <div class="section-aster" aria-hidden="true"><svg class="aster-mark" viewBox="-60 -60 120 120"></svg></div>

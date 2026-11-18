@@ -6,7 +6,7 @@ export const PAGES = [
   { id: 'events', href: '/events', label: 'Events' },
   { id: 'about', href: '/about', label: 'About' },
   { id: 'contact', href: '/contact', label: 'Contact' },
-  /** Experimental lab prototype — reachable from Home, omitted from main nav. */
+  /** Experimental lab prototype, reachable from Home, omitted from main nav. */
   { id: 'lab', href: '/lab', label: 'Lab', hidden: true },
 ]
 

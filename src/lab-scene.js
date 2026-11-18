@@ -176,6 +176,7 @@ export function createLabScene(root, hooks = {}) {
 
     const prevStation = station
     const prevPanel = panels.find((p) => p.getAttribute('data-station-panel') === prevStation)
+    const leavingMap = phase === 'map'
     killTween()
 
     if (reduced) {
@@ -183,39 +184,52 @@ export function createLabScene(root, hooks = {}) {
       return
     }
 
-    // Reveal target first so we can animate it in
-    if (chrome) chrome.hidden = false
-    if (map) map.hidden = true
-    if (entrance) entrance.hidden = true
-    panels.forEach((p) => {
-      p.hidden = p !== panel
+    activeTween = gsap.timeline({
+      defaults: { ease: 'power2.out' },
+      onComplete() {
+        activeTween = null
+      },
     })
 
-    if (prevStation && prevStation !== id) {
-      hooks.onStationLeave?.(prevStation)
-      closeAllBeakers(true)
+    if (leavingMap && map && !map.hidden) {
+      activeTween.to(map, { autoAlpha: 0, y: 12, duration: 0.28 }, 0)
+    } else if (prevPanel && prevPanel !== panel && !prevPanel.hidden) {
+      activeTween.to(prevPanel, { autoAlpha: 0, y: 16, duration: 0.28 }, 0)
     }
 
-    phase = 'station'
-    station = id
-    root.dataset.phase = 'station'
-    root.dataset.station = id
-    syncStationButtons()
-    hooks.onStationEnter?.(id)
+    activeTween.add(() => {
+      if (chrome) chrome.hidden = false
+      if (map) {
+        map.hidden = true
+        gsap.set(map, { clearProps: 'opacity,visibility,transform' })
+      }
+      if (entrance) entrance.hidden = true
+      panels.forEach((p) => {
+        p.hidden = p !== panel
+        if (p !== panel) gsap.set(p, { clearProps: 'opacity,visibility,transform' })
+      })
 
-    gsap.set(panel, { autoAlpha: 0, y: 22 })
-    if (prevPanel && prevPanel !== panel) gsap.set(prevPanel, { clearProps: 'opacity,transform' })
+      if (prevStation && prevStation !== id) {
+        hooks.onStationLeave?.(prevStation)
+        closeAllBeakers(true)
+      }
 
-    window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' })
+      phase = 'station'
+      station = id
+      root.dataset.phase = 'station'
+      root.dataset.station = id
+      syncStationButtons()
+      hooks.onStationEnter?.(id)
 
-    activeTween = gsap.to(panel, {
+      gsap.set(panel, { autoAlpha: 0, y: 22 })
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    })
+
+    activeTween.to(panel, {
       autoAlpha: 1,
       y: 0,
       duration: 0.45,
       ease: 'power2.out',
-      onComplete() {
-        activeTween = null
-      },
     })
   }
 
@@ -247,15 +261,28 @@ export function createLabScene(root, hooks = {}) {
       panel.hidden = !open
       if (stopper) gsap.set(stopper, { clearProps: 'y,rotation' })
       if (liquid) gsap.set(liquid, { clearProps: 'scaleY' })
+      if (open) {
+        const inner = panel.querySelector('.lab-beaker-panel-inner')
+        inner?.focus?.({ preventScroll: true })
+      }
       return
     }
 
     if (open) {
       panel.hidden = false
+      const inner = panel.querySelector('.lab-beaker-panel-inner')
       gsap.fromTo(
-        panel.querySelector('.lab-beaker-panel-inner'),
+        inner,
         { autoAlpha: 0, y: 10 },
-        { autoAlpha: 1, y: 0, duration: 0.35, ease: 'power2.out' },
+        {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.35,
+          ease: 'power2.out',
+          onComplete() {
+            inner?.focus?.({ preventScroll: true })
+          },
+        },
       )
       if (stopper) {
         gsap.to(stopper, { y: -18, rotation: -12, duration: 0.4, ease: 'power2.out' })
@@ -344,15 +371,26 @@ export function createLabScene(root, hooks = {}) {
   }
 
   function onKeydown(event) {
-    if (event.key === 'Escape' && openBeaker) {
-      const beaker = root.querySelector(`.lab-beaker[data-beaker="${openBeaker}"]`)
-      if (beaker) setBeakerOpen(beaker, false)
-      openBeaker = null
-    }
+    if (event.key !== 'Escape' || !openBeaker) return
+    const beaker = root.querySelector(`.lab-beaker[data-beaker="${openBeaker}"]`)
+    const hit = beaker?.querySelector('.lab-beaker-hit')
+    if (beaker) setBeakerOpen(beaker, false)
+    openBeaker = null
+    hit?.focus?.({ preventScroll: true })
+  }
+
+  function onPointerDown(event) {
+    if (!openBeaker) return
+    const inside = event.target.closest?.('.lab-beaker.is-open')
+    if (inside) return
+    const beaker = root.querySelector(`.lab-beaker[data-beaker="${openBeaker}"]`)
+    if (beaker) setBeakerOpen(beaker, false)
+    openBeaker = null
   }
 
   root.addEventListener('click', onClick)
   root.addEventListener('keydown', onKeydown)
+  root.addEventListener('pointerdown', onPointerDown)
   syncVisibility()
   syncStationButtons()
 
@@ -361,6 +399,7 @@ export function createLabScene(root, hooks = {}) {
       killTween()
       root.removeEventListener('click', onClick)
       root.removeEventListener('keydown', onKeydown)
+      root.removeEventListener('pointerdown', onPointerDown)
       if (station) hooks.onStationLeave?.(station)
       closeAllBeakers(true)
     },

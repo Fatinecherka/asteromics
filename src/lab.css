@@ -1,4 +1,4 @@
-/* Lab prototype — scoped under .lab-experience */
+/* Lab prototype, scoped under .lab-experience */
 
 .lab-experience {
   --lab-amber: #c49a3c;
@@ -35,7 +35,7 @@
   margin-bottom: 0.6rem;
 }
 
-/* —— Entrance —— */
+/* Entrance */
 
 .lab-entrance {
   position: relative;
@@ -46,8 +46,37 @@
   background:
     radial-gradient(ellipse 70% 50% at 50% 20%, color-mix(in srgb, var(--accent) 24%, transparent), transparent 70%),
     radial-gradient(ellipse 90% 45% at 50% 100%, color-mix(in srgb, var(--gold) 16%, transparent), transparent 60%),
+    radial-gradient(ellipse 40% 30% at 18% 70%, color-mix(in srgb, var(--lab-teal) 18%, transparent), transparent 70%),
     var(--lab-resin);
   color: var(--panel-text);
+}
+
+.lab-entrance-atmosphere {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.lab-entrance-particle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--gold) 70%, white);
+  opacity: 0.35;
+  animation: lab-drift 9s ease-in-out infinite;
+}
+
+.lab-entrance-particle:nth-child(1) { left: 18%; top: 28%; animation-delay: 0s; }
+.lab-entrance-particle:nth-child(2) { left: 72%; top: 22%; width: 2px; height: 2px; animation-delay: -2.4s; }
+.lab-entrance-particle:nth-child(3) { left: 58%; top: 48%; animation-delay: -4.8s; opacity: 0.22; }
+.lab-entrance-particle:nth-child(4) { left: 34%; top: 58%; width: 4px; height: 4px; animation-delay: -1.2s; }
+
+@keyframes lab-drift {
+  0%, 100% { transform: translate(0, 0); opacity: 0.2; }
+  50% { transform: translate(12px, -18px); opacity: 0.45; }
 }
 
 .lab-entrance-plane {
@@ -200,7 +229,7 @@
   outline: none;
 }
 
-/* —— Chrome / station strip —— */
+/* Chrome / station strip */
 
 .lab-chrome {
   position: sticky;
@@ -281,6 +310,19 @@
   color: inherit;
 }
 
+.lab-station-btn-hint {
+  display: none;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 0.7;
+  max-width: 9ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .lab-station-btn:hover,
 .lab-station-btn:focus-visible {
   color: var(--text);
@@ -293,7 +335,7 @@
   background: var(--surface);
 }
 
-/* —— Floor plan —— */
+/* Floor plan (schematic house plan) */
 
 .lab-map {
   padding: 48px 0 80px;
@@ -312,32 +354,160 @@
   margin-bottom: 2rem;
 }
 
+.lab-floorplan {
+  --lab-wall: color-mix(in srgb, var(--text) 55%, var(--line));
+  --lab-plan-bg: color-mix(in srgb, var(--surface) 88%, var(--gold));
+}
+
+.lab-floorplan-frame {
+  position: relative;
+  border: 3px solid var(--lab-wall);
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--line) 45%, transparent) 1px, transparent 1px) 0 0 / 28px 28px,
+    linear-gradient(0deg, color-mix(in srgb, var(--line) 45%, transparent) 1px, transparent 1px) 0 0 / 28px 28px,
+    var(--lab-plan-bg);
+  padding: 1.35rem 1rem 1.1rem;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--panel-text) 8%, transparent),
+    0 12px 40px color-mix(in srgb, var(--text) 6%, transparent);
+  overflow: hidden;
+}
+
+.lab-floorplan-north {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.85rem;
+  padding: 0 0.25rem;
+}
+
+.lab-floorplan-compass {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  width: 1.6rem;
+  height: 1.6rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+}
+
+.lab-floorplan-scale {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.lab-floorplan-scale i {
+  display: block;
+  width: 48px;
+  height: 2px;
+  background: var(--lab-wall);
+  position: relative;
+}
+
+.lab-floorplan-scale i::before,
+.lab-floorplan-scale i::after {
+  content: "";
+  position: absolute;
+  top: -3px;
+  width: 2px;
+  height: 8px;
+  background: var(--lab-wall);
+}
+
+.lab-floorplan-scale i::before { left: 0; }
+.lab-floorplan-scale i::after { right: 0; }
+
+.lab-floorplan-entry {
+  position: absolute;
+  top: 3.1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  width: 52px;
+  height: 10px;
+  border: 2px solid var(--lab-wall);
+  border-top: none;
+  background: var(--lab-plan-bg);
+  display: flex;
+  justify-content: center;
+}
+
+.lab-floorplan-entry-label {
+  position: absolute;
+  top: -1.15rem;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.lab-floorplan-hall {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  top: 48%;
+  height: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.lab-floorplan-hall-line {
+  display: block;
+  border-top: 1.5px dashed color-mix(in srgb, var(--lab-wall) 55%, transparent);
+  opacity: 0.7;
+}
+
 .lab-map-grid {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  gap: 12px;
+  gap: 10px;
+  position: relative;
+  z-index: 2;
 }
 
 .lab-map-tile {
   appearance: none;
-  border: 1px solid var(--line);
-  background:
-    linear-gradient(180deg, var(--lab-bench), var(--surface));
+  border: 2px solid var(--lab-wall);
+  background: color-mix(in srgb, var(--surface) 92%, white);
   color: var(--text);
   text-align: left;
-  padding: 1.25rem 1rem 1.1rem;
+  padding: 1rem 0.9rem 0.95rem;
   cursor: pointer;
-  min-height: 132px;
+  min-height: 148px;
   position: relative;
   font-family: inherit;
-  transition: border-color 0.2s ease, transform 0.2s ease;
+  transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.75rem;
+  overflow: hidden;
+}
+
+.lab-map-tile::before {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border: 1px solid color-mix(in srgb, var(--lab-wall) 28%, transparent);
+  pointer-events: none;
 }
 
 .lab-map-tile:hover,
 .lab-map-tile:focus-visible {
   border-color: var(--accent);
+  background: color-mix(in srgb, var(--surface) 70%, var(--accent-soft));
   outline: none;
-  transform: translateY(-2px);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 35%, transparent);
 }
 
 .lab-map-tile[data-tile="bench"] { grid-column: span 3; }
@@ -346,34 +516,188 @@
 .lab-map-tile[data-tile="seminar"] { grid-column: span 2; }
 .lab-map-tile[data-tile="desk"] { grid-column: span 2; }
 
-.lab-map-tile-mark {
-  display: block;
-  width: 28px;
-  height: 4px;
-  margin-bottom: 1rem;
-  background: var(--gold);
+.lab-map-tile-door {
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 22px;
+  height: 6px;
+  background: var(--lab-plan-bg);
+  border-left: 2px solid var(--lab-wall);
+  border-right: 2px solid var(--lab-wall);
+  z-index: 3;
 }
 
-.lab-map-tile[data-tile="analysis"] .lab-map-tile-mark { background: var(--lab-violet); }
-.lab-map-tile[data-tile="imaging"] .lab-map-tile-mark { background: var(--lab-teal); }
-.lab-map-tile[data-tile="seminar"] .lab-map-tile-mark { background: var(--accent-soft); }
-.lab-map-tile[data-tile="desk"] .lab-map-tile-mark { background: var(--text); width: 18px; }
+.lab-map-tile-copy {
+  position: relative;
+  z-index: 1;
+}
 
 .lab-map-tile-zone {
   display: block;
   font-family: "IBM Plex Mono", ui-monospace, monospace;
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--muted);
-  margin-bottom: 0.35rem;
+  margin-bottom: 0.3rem;
 }
 
 .lab-map-tile-label {
   display: block;
   font-family: "Fraunces", Georgia, serif;
-  font-size: 1.35rem;
+  font-size: 1.28rem;
   font-weight: 300;
+}
+
+/* Room fixtures (plan symbols) */
+
+.lab-map-fixture {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.35rem;
+  min-height: 42px;
+  position: relative;
+  z-index: 1;
+  opacity: 0.72;
+}
+
+.lab-map-fixture-bench .lab-map-fixture-slab {
+  display: block;
+  width: 46px;
+  height: 14px;
+  border: 1.5px solid var(--lab-wall);
+  background: color-mix(in srgb, var(--gold) 18%, transparent);
+}
+
+.lab-map-fixture-rack span {
+  display: block;
+  width: 12px;
+  height: 28px;
+  border: 1.5px solid var(--lab-wall);
+  border-radius: 0 0 40% 40%;
+  background: color-mix(in srgb, var(--lab-violet) 22%, transparent);
+}
+
+.lab-map-fixture-scope {
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  display: grid;
+}
+
+.lab-map-fixture-scope-ring {
+  width: 28px;
+  height: 28px;
+  border: 1.5px solid var(--lab-wall);
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 5px color-mix(in srgb, var(--lab-teal) 25%, transparent);
+}
+
+.lab-map-fixture-seats span {
+  display: block;
+  width: 16px;
+  height: 16px;
+  border: 1.5px solid var(--lab-wall);
+  border-radius: 2px 2px 4px 4px;
+  background: color-mix(in srgb, var(--accent-soft) 30%, transparent);
+}
+
+.lab-map-fixture-desk {
+  align-items: flex-end;
+  gap: 0.45rem;
+}
+
+.lab-map-fixture-desk-top {
+  width: 40px;
+  height: 22px;
+  border: 1.5px solid var(--lab-wall);
+  background: color-mix(in srgb, var(--text) 6%, transparent);
+}
+
+.lab-map-fixture-chair {
+  width: 14px;
+  height: 14px;
+  border: 1.5px solid var(--lab-wall);
+  border-radius: 50%;
+}
+
+/* Walking figures */
+
+.lab-walkers {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.lab-walker {
+  position: absolute;
+  width: 10px;
+  height: 18px;
+  opacity: 0.85;
+}
+
+.lab-walker i:first-child {
+  display: block;
+  width: 7px;
+  height: 7px;
+  margin: 0 auto 1px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--text) 70%, var(--accent));
+}
+
+.lab-walker i:last-child {
+  display: block;
+  width: 8px;
+  height: 10px;
+  margin: 0 auto;
+  border-radius: 2px 2px 1px 1px;
+  background: color-mix(in srgb, var(--text) 55%, var(--accent));
+}
+
+.lab-walker-a {
+  top: 38%;
+  left: 12%;
+  animation: lab-walk-a 14s linear infinite;
+}
+
+.lab-walker-b {
+  top: 62%;
+  left: 78%;
+  animation: lab-walk-b 18s linear infinite;
+}
+
+.lab-walker-c {
+  top: 44%;
+  left: 48%;
+  animation: lab-walk-c 12s linear infinite;
+  opacity: 0.7;
+}
+
+@keyframes lab-walk-a {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(120px, 8px); }
+  50% { transform: translate(220px, -6px); }
+  75% { transform: translate(90px, 18px); }
+  100% { transform: translate(0, 0); }
+}
+
+@keyframes lab-walk-b {
+  0% { transform: translate(0, 0); }
+  30% { transform: translate(-140px, -12px); }
+  60% { transform: translate(-260px, 10px); }
+  100% { transform: translate(0, 0); }
+}
+
+@keyframes lab-walk-c {
+  0% { transform: translate(0, 0) scaleX(1); }
+  40% { transform: translate(80px, 28px) scaleX(1); }
+  41% { transform: translate(80px, 28px) scaleX(-1); }
+  80% { transform: translate(-40px, 16px) scaleX(-1); }
+  81% { transform: translate(-40px, 16px) scaleX(1); }
+  100% { transform: translate(0, 0) scaleX(1); }
 }
 
 .lab-shelf {
@@ -391,23 +715,18 @@
   margin-bottom: 0.85rem;
 }
 
-.lab-shelf-bottles {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
+.lab-shelf-logos {
+  justify-content: flex-start;
+  gap: 16px 24px;
 }
 
-.lab-bottle {
-  font-family: "IBM Plex Mono", ui-monospace, monospace;
-  font-size: 0.72rem;
-  letter-spacing: 0.04em;
-  padding: 0.45rem 0.65rem;
-  border: 1px solid var(--line);
-  background: color-mix(in srgb, var(--surface) 80%, var(--accent-soft));
-  color: var(--muted);
+.lab-shelf-logos .logo img {
+  height: 32px;
+  max-width: 130px;
+  opacity: 0.8;
 }
 
-/* —— Station panels —— */
+/* Station panels */
 
 .lab-panel {
   padding: 40px 0 88px;
@@ -493,7 +812,7 @@
   margin: 0;
 }
 
-/* —— Beakers —— */
+/* Beakers */
 
 .lab-beaker-rack {
   display: grid;
@@ -678,7 +997,7 @@
   color: var(--muted);
 }
 
-/* —— Imaging —— */
+/* Imaging */
 
 .lab-imaging-stage {
   display: grid;
@@ -694,6 +1013,10 @@
   overflow: hidden;
   border: 2px solid var(--fov-ring, color-mix(in srgb, var(--gold) 50%, transparent));
   background: #0a090e;
+  box-shadow:
+    0 0 0 10px color-mix(in srgb, var(--surface) 90%, var(--gold)),
+    0 0 0 11px color-mix(in srgb, var(--gold) 35%, transparent),
+    0 18px 48px color-mix(in srgb, var(--text) 12%, transparent);
 }
 
 .lab-fov canvas {
@@ -762,7 +1085,7 @@
   accent-color: var(--gold);
 }
 
-/* —— Seminar —— */
+/* Seminar */
 
 .lab-seminar-poster {
   border: 1px solid var(--line);
@@ -780,6 +1103,24 @@
 
 .lab-seminar-slider {
   margin-top: 1.25rem;
+}
+
+.lab-seminar-frame {
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--panel) 4%, var(--bg));
+  padding: 0.65rem 0.65rem 0.85rem;
+}
+
+.lab-seminar-frame .slider {
+  border-radius: 0;
+}
+
+.lab-seminar-frame .track {
+  gap: 0.65rem;
+}
+
+.lab-seminar-frame .snav {
+  opacity: 0.85;
 }
 
 .lab-seminar-talk {
@@ -800,7 +1141,7 @@
   margin-bottom: 0.25rem;
 }
 
-/* —— Desk / pipette —— */
+/* Desk / pipette */
 
 .lab-desk-surface {
   display: grid;
@@ -925,9 +1266,21 @@
   border-bottom-color: var(--accent);
 }
 
-/* —— Responsive —— */
+/* Responsive */
 
 @media (max-width: 820px) {
+  .lab-floorplan-frame {
+    padding: 1.1rem 0.75rem 0.85rem;
+  }
+
+  .lab-floorplan-entry {
+    display: none;
+  }
+
+  .lab-floorplan-hall {
+    display: none;
+  }
+
   .lab-map-grid {
     grid-template-columns: 1fr 1fr;
   }
@@ -940,9 +1293,69 @@
     grid-column: span 1;
   }
 
+  .lab-map-tile {
+    min-height: 128px;
+  }
+
+  .lab-walker-a,
+  .lab-walker-b {
+    display: none;
+  }
+
   .lab-beaker-rack {
     grid-template-columns: 1fr;
     max-width: 280px;
+  }
+
+  .lab-desk-surface {
+    grid-template-columns: auto 1fr;
+    gap: 1.25rem;
+  }
+
+  .lab-pipette {
+    width: 40px;
+    height: 160px;
+    margin-top: 0;
+  }
+
+  .lab-pipette-body {
+    height: 88px;
+  }
+
+  .lab-pipette-tip {
+    top: 108px;
+    border-top-width: 44px;
+  }
+
+  .lab-station-btn-zone {
+    display: none;
+  }
+
+  .lab-station-btn-hint {
+    display: block;
+  }
+
+  .lab-station-btn {
+    padding: 0.45rem 0.55rem;
+  }
+}
+
+@media (max-width: 560px) {
+  .lab-map-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .lab-walker-c {
+    display: none;
+  }
+
+  .lab-entrance {
+    grid-template-rows: minmax(200px, 40vh) auto;
+  }
+
+  .lab-bench-facts div {
+    grid-template-columns: 1fr;
+    gap: 0.2rem;
   }
 
   .lab-desk-surface {
@@ -953,23 +1366,8 @@
     display: none;
   }
 
-  .lab-station-btn-zone {
-    display: none;
-  }
-}
-
-@media (max-width: 560px) {
-  .lab-map-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .lab-entrance {
-    grid-template-rows: minmax(200px, 40vh) auto;
-  }
-
-  .lab-bench-facts div {
-    grid-template-columns: 1fr;
-    gap: 0.2rem;
+  .lab-floorplan-north {
+    margin-bottom: 0.55rem;
   }
 }
 
@@ -986,4 +1384,17 @@
     animation: none;
     opacity: 0;
   }
+
+  .lab-entrance-particle,
+  .lab-walker {
+    animation: none !important;
+  }
+
+  .lab-walker {
+    opacity: 0.55;
+  }
+
+  .lab-walker-a { top: 40%; left: 22%; }
+  .lab-walker-b { top: 58%; left: 64%; }
+  .lab-walker-c { top: 48%; left: 46%; }
 }
