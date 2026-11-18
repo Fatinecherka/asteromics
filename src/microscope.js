@@ -81,10 +81,10 @@ function drawCell(ctx, cell, mode, cx, cy, scale) {
 }
 
 function drawBrightfield(ctx, cell, r) {
-  const membrane = `rgba(90, 70, 120, ${0.22 + cell.tint * 0.18})`
-  const fill = `rgba(140, 110, 170, ${0.12 + cell.tint * 0.1})`
-  const nucleus = `rgba(90, 55, 120, ${0.35 + cell.tint * 0.2})`
-  const rim = 'rgba(255, 248, 230, 0.55)'
+  const membrane = `rgba(50, 110, 100, ${0.28 + cell.tint * 0.2})`
+  const fill = `rgba(80, 150, 135, ${0.16 + cell.tint * 0.12})`
+  const nucleus = `rgba(35, 95, 85, ${0.4 + cell.tint * 0.22})`
+  const rim = 'rgba(255, 252, 245, 0.6)'
 
   if (cell.kind === 'cluster') {
     const n = 3 + Math.floor(cell.tint * 3)
@@ -128,10 +128,10 @@ function ellipseCell(ctx, x, y, rx, ry, fill, stroke, rim, nucleus, nr) {
 
 function drawDarkfield(ctx, cell, r) {
   const glow = cell.tint > 0.5
-    ? [179, 165, 216]
+    ? [143, 191, 182]
     : cell.tint > 0.25
       ? [224, 179, 85]
-      : [120, 200, 190]
+      : [95, 170, 160]
 
   const [cr, cg, cb] = glow
   const ry = cell.kind === 'oval' ? r * cell.aspect : r
@@ -174,14 +174,14 @@ function drawDarkfield(ctx, cell, r) {
 function paintBackground(ctx, w, h, mode) {
   if (mode === 'brightfield') {
     const g = ctx.createRadialGradient(w * 0.5, h * 0.48, w * 0.05, w * 0.5, h * 0.5, w * 0.55)
-    g.addColorStop(0, '#f3eee3')
-    g.addColorStop(0.55, '#e7dfd0')
-    g.addColorStop(1, '#cfc4ad')
+    g.addColorStop(0, '#f2f5f2')
+    g.addColorStop(0.55, '#e2eae6')
+    g.addColorStop(1, '#c5d2cc')
     ctx.fillStyle = g
     ctx.fillRect(0, 0, w, h)
 
     // mild Kohler unevenness
-    ctx.fillStyle = 'rgba(180, 150, 90, 0.05)'
+    ctx.fillStyle = 'rgba(150, 170, 130, 0.05)'
     ctx.beginPath()
     ctx.ellipse(w * 0.62, h * 0.38, w * 0.22, h * 0.18, 0.3, 0, Math.PI * 2)
     ctx.fill()
@@ -189,9 +189,9 @@ function paintBackground(ctx, w, h, mode) {
   }
 
   const g = ctx.createRadialGradient(w * 0.5, h * 0.48, 0, w * 0.5, h * 0.5, w * 0.55)
-  g.addColorStop(0, '#16141d')
-  g.addColorStop(0.6, '#0d0c12')
-  g.addColorStop(1, '#050508')
+  g.addColorStop(0, '#1a2825')
+  g.addColorStop(0.6, '#0f1816')
+  g.addColorStop(1, '#060a09')
   ctx.fillStyle = g
   ctx.fillRect(0, 0, w, h)
 }
@@ -242,7 +242,7 @@ export function createMicroscope(canvas, options = {}) {
     mode = next
     if (labelEl) {
       const tag = mode === 'brightfield' ? 'Brightfield' : 'Darkfield'
-      labelEl.textContent = `AsterOmics · 40× · ${tag}`
+      labelEl.textContent = `AsterOmics · ${tag}`
     }
     if (!running) render(performance.now())
   }

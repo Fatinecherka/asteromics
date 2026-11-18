@@ -19,7 +19,7 @@ const html = `
         <div class="fov-vignette"></div>
         <div class="fov-reticle"></div>
         <div class="fov-hud">
-          <div class="fov-label" id="fov-label">AsterOmics · 40× · Brightfield</div>
+          <div class="fov-label" id="fov-label">AsterOmics · Brightfield</div>
           <div class="fov-scale">
             <div class="fov-scale-bar"></div>
             <span>10 μm</span>
@@ -32,7 +32,7 @@ const html = `
       <div class="hero-copy is-hidden" id="hero-copy">
         <h1>From biological question to omics answer.</h1>
         <p class="sub">AsterOmics provides omics data analysis for research laboratories, universities and companies. Single cell, spatial, bulk transcriptomics, proteomics, lipidomics and metabolomics.</p>
-        <a class="cta" href="/contact">REQUEST A FIRST CONSULTATION</a>
+        <a class="cta" href="/contact">Request a free consultation</a>
       </div>
     </div>
 
@@ -101,6 +101,23 @@ const html = `
     <div class="section-aster" aria-hidden="true"><svg class="aster-mark" viewBox="-60 -60 120 120"></svg></div>
   </section>
 
+  <section id="meet" class="meet slide-edge">
+    <div class="wrap">
+      <div class="meet-row reveal">
+        <span class="av">
+          <img src="/assets/portrait.jpg" alt="Portrait of Fatine Cherkaoui" width="120" height="120">
+        </span>
+        <div class="meet-copy">
+          <p class="eyebrow">About</p>
+          <h2>Meet Fatine</h2>
+          <p class="lede">AsterOmics is led by Fatine Cherkaoui, PhD, someone who knows what happens at the bench and behind the analysis.</p>
+          <a class="teaser-go" href="/about">Read more →</a>
+        </div>
+      </div>
+    </div>
+    <div class="section-aster" aria-hidden="true"><svg class="aster-mark" viewBox="-60 -60 120 120"></svg></div>
+  </section>
+
   <section id="newsletter-section" class="slide-edge">
     <div class="wrap">
       <div id="newsletter" class="reveal"></div>
@@ -136,16 +153,19 @@ function initHeroIntro(microscope) {
   }
 
   if (copy) {
-    gsap.set(copy, { autoAlpha: 0, y: 18 })
+    gsap.set(copy, { autoAlpha: 0, y: 14 })
     copy.classList.remove('is-hidden')
   }
 
-  const state = { focus: 0 }
+  const state = { focus: 0.28 }
+  microscope.setFocus(state.focus)
+  if (focusInput) focusInput.value = String(Math.round(state.focus * 100))
+
   heroTl = gsap.timeline({ defaults: { ease: 'power2.inOut' } })
 
   heroTl.to(state, {
     focus: 0.58,
-    duration: 2.4,
+    duration: 1.2,
     onUpdate() {
       microscope.setFocus(state.focus)
       if (focusInput) focusInput.value = String(Math.round(state.focus * 100))
@@ -158,10 +178,10 @@ function initHeroIntro(microscope) {
       {
         autoAlpha: 1,
         y: 0,
-        duration: 0.9,
+        duration: 0.7,
         ease: 'power2.out',
       },
-      '-=0.9',
+      0.25,
     )
   }
 }

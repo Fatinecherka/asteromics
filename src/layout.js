@@ -47,7 +47,7 @@ export function mark(svg, flat = false) {
         r: ring.size,
         opacity: (0.7 + ri * 0.1).toFixed(2),
       })
-      if (flat) c.setAttribute('fill', '#EDEAE1')
+      if (flat) c.setAttribute('fill', '#eef1ee')
       else c.setAttribute('class', 'petal')
       svg.appendChild(c)
     }
@@ -72,7 +72,7 @@ export function mark(svg, flat = false) {
       cy: (Math.sin(a) * rad).toFixed(1),
       r: 3,
     })
-    if (flat) c.setAttribute('fill', '#EDEAE1')
+    if (flat) c.setAttribute('fill', '#eef1ee')
     else c.setAttribute('class', 'disc')
     svg.appendChild(c)
   }
