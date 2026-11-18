@@ -1704,6 +1704,23 @@ footer .wrap {
   color: var(--gold);
 }
 
+.newsletter-frame {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+.newsletter-thanks {
+  margin-top: 28px;
+  max-width: 36ch;
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--text);
+}
+
 /* ── Contact form ──────────────────────────────────────── */
 
 .contact-form {

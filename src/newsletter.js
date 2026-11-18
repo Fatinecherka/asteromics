@@ -1,7 +1,9 @@
 const BUTTONDOWN_USERNAME = 'asteromics'
+const FRAME_NAME = 'bd-newsletter-frame'
 
 /**
  * Mount a Buttondown newsletter signup into `container`.
+ * Posts into a hidden iframe so the visitor stays on this page.
  * @param {HTMLElement | null} container
  */
 export function mountNewsletter(container) {
@@ -21,7 +23,9 @@ export function mountNewsletter(container) {
         class="newsletter-form"
         action="${action}"
         method="post"
+        target="${FRAME_NAME}"
       >
+        <input type="hidden" name="embed" value="1">
         <label class="newsletter-label" for="bd-email">Email</label>
         <div class="newsletter-row">
           <input
@@ -43,6 +47,42 @@ export function mountNewsletter(container) {
             : `<p class="newsletter-note newsletter-note--warn">Newsletter signup will go live once the Buttondown account is connected.</p>`
         }
       </form>
+      <iframe
+        class="newsletter-frame"
+        name="${FRAME_NAME}"
+        title="Buttondown signup"
+        hidden
+        aria-hidden="true"
+        tabindex="-1"
+      ></iframe>
     </div>
   `
+
+  if (!configured) return
+
+  const form = container.querySelector('.newsletter-form')
+  const submit = container.querySelector('.newsletter-submit')
+  if (!form || !submit) return
+
+  form.addEventListener('submit', (event) => {
+    if (!form.checkValidity()) {
+      event.preventDefault()
+      form.reportValidity()
+      return
+    }
+
+    submit.disabled = true
+    submit.textContent = 'Subscribing…'
+
+    // Let the native POST reach the hidden iframe, then show in-page success.
+    window.setTimeout(() => {
+      const thanks = document.createElement('p')
+      thanks.className = 'newsletter-thanks'
+      thanks.setAttribute('role', 'status')
+      thanks.setAttribute('aria-live', 'polite')
+      thanks.textContent =
+        'Thanks — check your inbox to confirm your subscription.'
+      form.replaceWith(thanks)
+    }, 0)
+  })
 }
