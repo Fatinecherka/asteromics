@@ -1,9 +1,9 @@
 import { defineConfig } from 'vite'
 import { resolve } from 'node:path'
+import { copyFileSync } from 'node:fs'
 
 /**
  * Keep one global CSS asset in <head> (with preload), and defer page JS to </body>.
- * Styles are shared across all HTML entries so navigations hit the same cached URL.
  */
 function globalCssFirst() {
   return {
@@ -23,7 +23,6 @@ function globalCssFirst() {
           },
         )
 
-        // Drop any prior CSS preloads; we regenerate them from the final asset URL.
         next = next.replace(
           /<link\b[^>]*\brel=["']preload["'][^>]*\bas=["']style["'][^>]*>/gi,
           '',
@@ -74,19 +73,26 @@ function globalCssFirst() {
   }
 }
 
+/** Copy index.html → 404.html so GitHub Pages deep links load the SPA. */
+function spaFallback() {
+  return {
+    name: 'spa-fallback',
+    closeBundle() {
+      const index = resolve(__dirname, 'dist/index.html')
+      const fallback = resolve(__dirname, 'dist/404.html')
+      copyFileSync(index, fallback)
+    },
+  }
+}
+
 export default defineConfig({
   base: '/',
-  plugins: [globalCssFirst()],
+  appType: 'spa',
+  plugins: [globalCssFirst(), spaFallback()],
   build: {
     cssCodeSplit: false,
     rollupOptions: {
-      input: {
-        main: resolve(__dirname, 'index.html'),
-        services: resolve(__dirname, 'services.html'),
-        events: resolve(__dirname, 'events.html'),
-        about: resolve(__dirname, 'about.html'),
-        contact: resolve(__dirname, 'contact.html'),
-      },
+      input: resolve(__dirname, 'index.html'),
       output: {
         assetFileNames: (asset) => {
           const name = asset.names?.[0] ?? asset.name ?? ''

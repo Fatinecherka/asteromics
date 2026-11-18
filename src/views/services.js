@@ -1,72 +1,12 @@
-<!DOCTYPE html>
-<html lang="en" data-theme="day" data-mode="brightfield">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script>
-    (function () {
-      try {
-        var t = localStorage.getItem("asteromics-theme");
-        if (t === "day" || t === "night") {
-          document.documentElement.setAttribute("data-theme", t);
-          document.documentElement.setAttribute("data-mode", t === "day" ? "brightfield" : "darkfield");
-        }
-      } catch (e) {}
-      function syncToggle() {
-        var tg = document.getElementById("tg");
-        if (!tg) return;
-        var theme = document.documentElement.getAttribute("data-theme") || "day";
-        tg.textContent = theme === "day" ? "DARKFIELD" : "BRIGHTFIELD";
-      }
-      if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", syncToggle);
-      else syncToggle();
-    })();
-  </script>
-  <title>Services — AsterOmics</title>
-  <meta name="description" content="AsterOmics services: experimental design, omics data analysis, and publication support.">
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="preload" href="/src/styles.css" as="style">
-  <link rel="stylesheet" href="/src/styles.css">
-</head>
-<body>
-  <nav>
-    <div class="wrap">
-      <a class="brand" href="index.html" aria-label="AsterOmics home">
-        <svg id="nm" viewBox="-60 -60 120 120" aria-hidden="true"></svg>
-        <span class="n">Aster<span class="o">O</span>mics</span>
-      </a>
-      <div class="navright">
-        <div class="links">
-          <a href="index.html">Home</a>
-          <a href="services.html" aria-current="page">Services</a>
-          <a href="events.html">Events</a>
-          <a href="about.html">About</a>
-          <a href="contact.html">Contact</a>
-        </div>
-        <button class="menu-toggle" id="menu-toggle" type="button" aria-expanded="false" aria-controls="nav-drawer" aria-label="Open menu">
-          <span class="menu-toggle-bars" aria-hidden="true"></span>
-        </button>
-        <button class="toggle" id="tg" type="button" aria-label="Switch microscopy mode">DARKFIELD</button>
-      </div>
-    </div>
-  </nav>
-  <div class="nav-drawer" id="nav-drawer" hidden>
-    <div class="nav-drawer-backdrop" data-drawer-close></div>
-    <div class="nav-drawer-panel" role="dialog" aria-modal="true" aria-label="Site navigation">
-      <button class="nav-drawer-close" type="button" data-drawer-close aria-label="Close menu">Close</button>
-      <div class="nav-drawer-links">
-        <a href="index.html">Home</a>
-        <a href="services.html" aria-current="page">Services</a>
-        <a href="events.html">Events</a>
-        <a href="about.html">About</a>
-        <a href="contact.html">Contact</a>
-      </div>
-    </div>
-  </div>
+export const meta = {
+  title: 'Services — AsterOmics',
+  description:
+    'AsterOmics services: experimental design, omics data analysis, and publication support.',
+}
 
+export const id = 'services'
+
+const html = `
   <header class="page-hero">
     <div class="wrap">
       <p class="eyebrow">Services</p>
@@ -190,23 +130,12 @@
       <a class="mail reveal" href="mailto:contact@asteromics.com">contact@asteromics.com</a>
     </div>
   </section>
+`
 
-  <footer>
-    <div class="wrap">
-      <div class="footer-meta">
-        <span>&copy; AsterOmics</span>
-        <span>AsterOmics.com</span>
-      </div>
-      <div class="footer-links">
-        <a href="index.html">Home</a>
-        <a href="services.html" aria-current="page">Services</a>
-        <a href="events.html">Events</a>
-        <a href="about.html">About</a>
-        <a href="contact.html">Contact</a>
-      </div>
-    </div>
-  </footer>
+export function render(container) {
+  container.innerHTML = html
+}
 
-  <script type="module" src="/src/pages/services.js"></script>
-</body>
-</html>
+export function mount() {}
+
+export function unmount() {}

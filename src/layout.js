@@ -1,11 +1,11 @@
 const NS = 'http://www.w3.org/2000/svg'
 
-const PAGES = [
-  { id: 'home', href: 'index.html', label: 'Home' },
-  { id: 'services', href: 'services.html', label: 'Services' },
-  { id: 'events', href: 'events.html', label: 'Events' },
-  { id: 'about', href: 'about.html', label: 'About' },
-  { id: 'contact', href: 'contact.html', label: 'Contact' },
+export const PAGES = [
+  { id: 'home', href: '/', label: 'Home' },
+  { id: 'services', href: '/services', label: 'Services' },
+  { id: 'events', href: '/events', label: 'Events' },
+  { id: 'about', href: '/about', label: 'About' },
+  { id: 'contact', href: '/contact', label: 'Contact' },
 ]
 
 function el(n, a) {
@@ -92,7 +92,7 @@ function navHtml(activePage) {
   return `
   <nav>
     <div class="wrap">
-      <a class="brand" href="index.html" aria-label="AsterOmics home">
+      <a class="brand" href="/" aria-label="AsterOmics home">
         <svg id="nm" viewBox="-60 -60 120 120" aria-hidden="true"></svg>
         <span class="n">Aster<span class="o">O</span>mics</span>
       </a>
@@ -141,6 +141,14 @@ function initMarks() {
 
 const THEME_KEY = 'asteromics-theme'
 
+/** @type {{ setMode?: (mode: string) => void } | null} */
+let microscopeScope = null
+
+/** @type {((open: boolean, opts?: { restoreFocus?: boolean }) => void) | null} */
+let setDrawerOpen = null
+
+let chromeReady = false
+
 function readStoredTheme() {
   try {
     const stored = localStorage.getItem(THEME_KEY)
@@ -159,7 +167,36 @@ function writeStoredTheme(theme) {
   }
 }
 
-function initTheme(scope) {
+/**
+ * @param {{ setMode?: (mode: string) => void } | null} scope
+ */
+export function setMicroscopeScope(scope) {
+  microscopeScope = scope
+  if (!scope) return
+  const theme = document.documentElement.getAttribute('data-theme') || 'day'
+  const mode = theme === 'day' ? 'brightfield' : 'darkfield'
+  scope.setMode?.(mode)
+}
+
+export function closeMobileNav() {
+  setDrawerOpen?.(false, { restoreFocus: false })
+}
+
+/**
+ * Update aria-current on nav / drawer / footer links for the active route.
+ * @param {string} activePage
+ */
+export function setActivePage(activePage) {
+  document.querySelectorAll('nav a[href], .nav-drawer a[href], footer a[href]').forEach((a) => {
+    const href = a.getAttribute('href')
+    const page = PAGES.find((p) => p.href === href)
+    if (!page) return
+    if (page.id === activePage) a.setAttribute('aria-current', 'page')
+    else a.removeAttribute('aria-current')
+  })
+}
+
+function initTheme() {
   const root = document.documentElement
   const tg = document.getElementById('tg')
   if (!tg) return
@@ -170,7 +207,7 @@ function initTheme(scope) {
     root.setAttribute('data-mode', mode)
     tg.textContent = theme === 'day' ? 'DARKFIELD' : 'BRIGHTFIELD'
     writeStoredTheme(theme)
-    scope?.setMode?.(mode)
+    microscopeScope?.setMode?.(mode)
   }
 
   apply(readStoredTheme() || root.getAttribute('data-theme') || 'day')
@@ -202,6 +239,8 @@ function initMobileNav() {
     if (restoreFocus) toggle.focus()
   }
 
+  setDrawerOpen = setOpen
+
   toggle.addEventListener('click', () => {
     setOpen(drawer.hidden)
   })
@@ -211,10 +250,8 @@ function initMobileNav() {
   })
 
   drawer.querySelectorAll('a').forEach((a) => {
-    a.addEventListener('click', (e) => {
-      if (a.getAttribute('aria-current') !== 'page') return
-      e.preventDefault()
-      setOpen(false)
+    a.addEventListener('click', () => {
+      setOpen(false, { restoreFocus: false })
     })
   })
 
@@ -242,21 +279,33 @@ function initMobileNav() {
 }
 
 /**
- * Wire theme toggle and aster marks. Nav/footer are SSR'd in HTML;
- * only inject them if missing (e.g. incomplete pages in dev).
- * @param {string} activePage - one of: home | services | events | about | contact
- * @param {{ setMode?: (mode: string) => void } | null} [scope]
+ * Inject chrome if missing and bind theme / mobile nav once.
+ * @param {string} [activePage]
  */
-export function initChrome(activePage, scope = null) {
+export function initChrome(activePage = 'home') {
   const body = document.body
   if (!body.querySelector('nav')) {
     body.insertAdjacentHTML('afterbegin', navHtml(activePage))
   }
   if (!body.querySelector('footer')) {
-    body.insertAdjacentHTML('beforeend', footerHtml(activePage))
+    const app = document.getElementById('app')
+    if (app) app.insertAdjacentHTML('afterend', footerHtml(activePage))
+    else body.insertAdjacentHTML('beforeend', footerHtml(activePage))
   }
 
+  setActivePage(activePage)
   initMarks()
-  initTheme(scope)
+
+  if (chromeReady) return
+  chromeReady = true
+  initTheme()
   initMobileNav()
+}
+
+/**
+ * Re-paint section aster marks after view content changes.
+ */
+export function refreshMarks() {
+  mark(document.getElementById('nm'), false)
+  document.querySelectorAll('svg.aster-mark').forEach((svg) => mark(svg, false))
 }

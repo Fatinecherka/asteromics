@@ -31,6 +31,7 @@ const EVENTS = [
 /**
  * Initialise the horizontal events photo slider.
  * Expects #slider, #track, #dots, #s-prev, #s-next in the DOM.
+ * @returns {() => void} destroy
  */
 export function initEventsSlider() {
   const track = document.getElementById('track')
@@ -38,10 +39,14 @@ export function initEventsSlider() {
   const prev = document.getElementById('s-prev')
   const next = document.getElementById('s-next')
   const box = document.getElementById('slider')
-  if (!track || !dots || !box || !EVENTS.length) return
+  if (!track || !dots || !box || !EVENTS.length) return () => {}
 
   let timer = null
+  /** @type {IntersectionObserver | null} */
+  let io = null
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  /** @type {Array<() => void>} */
+  const cleanups = []
 
   EVENTS.forEach((ev, k) => {
     const fig = document.createElement('figure')
@@ -80,11 +85,13 @@ export function initEventsSlider() {
     d.type = 'button'
     d.className = 'dot'
     d.setAttribute('aria-label', `Photo ${k + 1}`)
-    d.addEventListener('click', () => {
+    const onDot = () => {
       goTo(k)
       stop()
       start()
-    })
+    }
+    d.addEventListener('click', onDot)
+    cleanups.push(() => d.removeEventListener('click', onDot))
     dots.appendChild(d)
   })
 
@@ -125,27 +132,44 @@ export function initEventsSlider() {
     }
   }
 
-  prev?.addEventListener('click', () => {
+  const onPrev = () => {
     goTo(index() - 1)
     stop()
     start()
-  })
-  next?.addEventListener('click', () => {
+  }
+  const onNext = () => {
     advance()
     stop()
     start()
-  })
+  }
+
+  prev?.addEventListener('click', onPrev)
+  next?.addEventListener('click', onNext)
+  if (prev) cleanups.push(() => prev.removeEventListener('click', onPrev))
+  if (next) cleanups.push(() => next.removeEventListener('click', onNext))
+
   track.addEventListener('scroll', syncDots, { passive: true })
+  cleanups.push(() => track.removeEventListener('scroll', syncDots))
+
   box.addEventListener('mouseenter', stop)
   box.addEventListener('mouseleave', start)
   box.addEventListener('pointerdown', stop)
   box.addEventListener('touchstart', stop, { passive: true })
   box.addEventListener('focusin', stop)
+  cleanups.push(() => {
+    box.removeEventListener('mouseenter', stop)
+    box.removeEventListener('mouseleave', start)
+    box.removeEventListener('pointerdown', stop)
+    box.removeEventListener('touchstart', stop)
+    box.removeEventListener('focusin', stop)
+  })
+
   window.addEventListener('resize', syncDots)
+  cleanups.push(() => window.removeEventListener('resize', syncDots))
   syncDots()
 
   if (window.IntersectionObserver) {
-    const io = new IntersectionObserver(
+    io = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => (e.isIntersecting ? start() : stop()))
       },
@@ -154,5 +178,13 @@ export function initEventsSlider() {
     io.observe(box)
   } else {
     start()
+  }
+
+  return () => {
+    stop()
+    io?.disconnect()
+    cleanups.forEach((fn) => fn())
+    track.replaceChildren()
+    dots.replaceChildren()
   }
 }
