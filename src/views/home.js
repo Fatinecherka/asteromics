@@ -33,6 +33,7 @@ const html = `
         <h1>From biological question to omics answer.</h1>
         <p class="sub">AsterOmics provides omics data analysis for research laboratories, universities and companies. Single cell, spatial, bulk transcriptomics, proteomics, lipidomics and metabolomics.</p>
         <a class="cta" href="/contact">Request a free consultation</a>
+        <a class="lab-enter-link" href="/lab">Or enter the lab →</a>
       </div>
     </div>
 

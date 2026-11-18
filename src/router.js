@@ -5,6 +5,7 @@ import * as services from './views/services.js'
 import * as events from './views/events.js'
 import * as about from './views/about.js'
 import * as contact from './views/contact.js'
+import * as lab from './views/lab.js'
 
 const routes = {
   home,
@@ -12,6 +13,7 @@ const routes = {
   events,
   about,
   contact,
+  lab,
 }
 
 const LEGACY = {

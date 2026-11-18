@@ -6,6 +6,8 @@ export const PAGES = [
   { id: 'events', href: '/events', label: 'Events' },
   { id: 'about', href: '/about', label: 'About' },
   { id: 'contact', href: '/contact', label: 'Contact' },
+  /** Experimental lab prototype — reachable from Home, omitted from main nav. */
+  { id: 'lab', href: '/lab', label: 'Lab', hidden: true },
 ]
 
 function el(n, a) {
@@ -79,10 +81,12 @@ export function mark(svg, flat = false) {
 }
 
 function pageLinks(activePage, indent = '          ') {
-  return PAGES.map((p) => {
-    const active = p.id === activePage ? ' aria-current="page"' : ''
-    return `${indent}<a href="${p.href}"${active}>${p.label}</a>`
-  }).join('\n')
+  return PAGES.filter((p) => !p.hidden)
+    .map((p) => {
+      const active = p.id === activePage ? ' aria-current="page"' : ''
+      return `${indent}<a href="${p.href}"${active}>${p.label}</a>`
+    })
+    .join('\n')
 }
 
 function navHtml(activePage) {
