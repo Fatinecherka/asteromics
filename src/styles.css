@@ -571,31 +571,6 @@ html[data-theme="day"] .cta:hover {
   background: color-mix(in srgb, var(--accent) 72%, var(--gold));
 }
 
-.lab-enter-link {
-  display: inline-block;
-  margin: 18px 0 0 18px;
-  vertical-align: middle;
-  color: color-mix(in srgb, var(--panel-text) 78%, transparent);
-  text-decoration: none;
-  font-size: 14px;
-  border-bottom: 1px solid color-mix(in srgb, var(--panel-text) 28%, transparent);
-  transition: color 0.2s ease, border-color 0.2s ease;
-}
-
-.lab-enter-link:hover,
-.lab-enter-link:focus-visible {
-  color: var(--panel-text);
-  border-bottom-color: color-mix(in srgb, var(--gold) 70%, transparent);
-  outline: none;
-}
-
-@media (max-width: 560px) {
-  .lab-enter-link {
-    display: block;
-    margin: 16px 0 0;
-  }
-}
-
 .hero-controls {
   position: absolute;
   right: 26px;
@@ -826,10 +801,29 @@ h2 {
   overflow: hidden;
 }
 
-.card .banner svg {
+.card .banner img {
   display: block;
   width: 100%;
   height: 100%;
+  object-fit: cover;
+  filter: saturate(0.88) contrast(0.96);
+}
+
+.card .banner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--bg) 16%, transparent) 0%,
+    color-mix(in srgb, var(--accent) 14%, transparent) 50%,
+    color-mix(in srgb, var(--panel) 18%, transparent) 100%
+  );
+}
+
+[data-theme="night"] .card .banner img {
+  filter: saturate(0.78) brightness(0.88) contrast(1.02);
 }
 
 .card h3 {
@@ -1221,6 +1215,40 @@ footer .wrap {
   padding-bottom: 4px;
 }
 
+.teaser-media {
+  display: block;
+  position: relative;
+  aspect-ratio: 4 / 3;
+  margin-bottom: 18px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+}
+
+.teaser-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.88) contrast(0.96);
+}
+
+.teaser-media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    160deg,
+    color-mix(in srgb, var(--bg) 18%, transparent) 0%,
+    color-mix(in srgb, var(--accent) 12%, transparent) 55%,
+    color-mix(in srgb, var(--panel) 14%, transparent) 100%
+  );
+}
+
+[data-theme="night"] .teaser-media img {
+  filter: saturate(0.78) brightness(0.88) contrast(1.02);
+}
+
 .teaser h3 {
   font-family: "Fraunces", Georgia, serif;
   font-size: 20px;
@@ -1248,6 +1276,46 @@ footer .wrap {
 
 .teaser:hover .teaser-go {
   color: var(--gold);
+}
+
+/* ── Atmosphere photo strip ─────────────────────────────── */
+
+.photo-strip {
+  padding: 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.photo-strip-frame {
+  position: relative;
+  max-height: min(42vh, 420px);
+  overflow: hidden;
+  background: var(--panel);
+}
+
+.photo-strip-frame img {
+  display: block;
+  width: 100%;
+  height: min(42vh, 420px);
+  object-fit: cover;
+  object-position: center 40%;
+  filter: saturate(0.82) contrast(0.95);
+}
+
+.photo-strip-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--bg) 35%, transparent) 0%,
+    color-mix(in srgb, var(--accent) 10%, transparent) 45%,
+    color-mix(in srgb, var(--panel) 28%, transparent) 100%
+  );
+}
+
+[data-theme="night"] .photo-strip-frame img {
+  filter: saturate(0.72) brightness(0.82) contrast(1.04);
 }
 
 .inline-link {

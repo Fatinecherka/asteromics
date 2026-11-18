@@ -1,0 +1,29 @@
+Photo credits (Pexels License — free for commercial use; attribution appreciated)
+
+bench-hands.jpg
+  Edward Jenner — https://www.pexels.com/photo/pipette-with-specimen-on-a-microscope-4031436/
+  Used: Services → Design banner
+
+analysis-screen.jpg
+  Tima Miroshnichenko — https://www.pexels.com/photo/microscope-beside-a-computer-9574561/
+  Used: Services → Analysis banner
+
+manuscript.jpg
+  lil artsy — https://www.pexels.com/photo/person-holding-orange-pen-1925536/
+  Used: Services → Publication banner
+
+teaser-services.jpg
+  Chokniti Khongchum — https://www.pexels.com/photo/person-holding-laboratory-flask-2280571/
+  Used: Home → Services teaser
+
+teaser-events.jpg
+  Luis Quintero — https://www.pexels.com/photo/people-sitting-on-chair-inside-room-2774556/
+  Used: Home → Events teaser
+
+teaser-about.jpg
+  Vlada Karpovich — https://www.pexels.com/photo/person-using-laptop-computer-4050315/
+  Used: Home → About teaser
+
+practice-strip.jpg
+  Chokniti Khongchum — https://www.pexels.com/photo/close-up-photo-of-test-tubes-2280549/
+  Used: Home → photo strip between overview and Meet Fatine

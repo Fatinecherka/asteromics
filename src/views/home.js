@@ -83,16 +83,25 @@ const html = `
       <p class="lede reveal">Support at every stage of a project: experimental design, computational analysis, and figures ready for a manuscript. Work starts with a free consultation.</p>
       <div class="grid3 after">
         <a class="teaser reveal" href="/services">
+          <span class="teaser-media">
+            <img src="/assets/photos/teaser-services.jpg" alt="Gloved hand holding a laboratory flask beside a microscope" width="900" height="600" loading="lazy" decoding="async">
+          </span>
           <h3>Services</h3>
           <p>Design, analysis and publication support for single-cell, spatial and multi-omics projects.</p>
           <span class="teaser-go">Explore services →</span>
         </a>
         <a class="teaser reveal" href="/events">
+          <span class="teaser-media">
+            <img src="/assets/photos/teaser-events.jpg" alt="Audience seated at a talk or workshop" width="900" height="600" loading="lazy" decoding="async">
+          </span>
           <h3>Events</h3>
           <p>Talks, workshops and meetings, including FeWhale at Impact Hub Antwerp.</p>
           <span class="teaser-go">See events →</span>
         </a>
         <a class="teaser reveal" href="/about">
+          <span class="teaser-media">
+            <img src="/assets/photos/teaser-about.jpg" alt="Quiet research desk with laptop, books and notebook" width="900" height="600" loading="lazy" decoding="async">
+          </span>
           <h3>About</h3>
           <p>Led by Fatine Cherkaoui, PhD. Experimental and computational training in one practice.</p>
           <span class="teaser-go">Meet Fatine →</span>
@@ -100,6 +109,12 @@ const html = `
       </div>
     </div>
     <div class="section-aster" aria-hidden="true"><svg class="aster-mark" viewBox="-60 -60 120 120"></svg></div>
+  </section>
+
+  <section id="practice-strip" class="photo-strip slide-edge" aria-hidden="true">
+    <div class="photo-strip-frame">
+      <img src="/assets/photos/practice-strip.jpg" alt="" width="1400" height="933" loading="lazy" decoding="async">
+    </div>
   </section>
 
   <section id="meet" class="meet slide-edge">
