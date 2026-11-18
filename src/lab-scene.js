@@ -379,10 +379,36 @@ export function createLabScene(root, hooks = {}) {
     hit?.focus?.({ preventScroll: true })
   }
 
+  /** @type {{ x: number, y: number, outside: boolean } | null} */
+  let dismissGesture = null
+
   function onPointerDown(event) {
-    if (!openBeaker) return
-    const inside = event.target.closest?.('.lab-beaker.is-open')
-    if (inside) return
+    if (!openBeaker) {
+      dismissGesture = null
+      return
+    }
+    const inside = Boolean(event.target.closest?.('.lab-beaker.is-open'))
+    dismissGesture = {
+      x: event.clientX,
+      y: event.clientY,
+      outside: !inside,
+    }
+  }
+
+  function onPointerUp(event) {
+    if (!openBeaker || !dismissGesture?.outside) {
+      dismissGesture = null
+      return
+    }
+
+    const dx = Math.abs(event.clientX - dismissGesture.x)
+    const dy = Math.abs(event.clientY - dismissGesture.y)
+    dismissGesture = null
+
+    // Treat as scroll/drag — keep the reagent open
+    if (dx > 10 || dy > 10) return
+    if (event.target.closest?.('.lab-beaker.is-open')) return
+
     const beaker = root.querySelector(`.lab-beaker[data-beaker="${openBeaker}"]`)
     if (beaker) setBeakerOpen(beaker, false)
     openBeaker = null
@@ -391,6 +417,7 @@ export function createLabScene(root, hooks = {}) {
   root.addEventListener('click', onClick)
   root.addEventListener('keydown', onKeydown)
   root.addEventListener('pointerdown', onPointerDown)
+  root.addEventListener('pointerup', onPointerUp)
   syncVisibility()
   syncStationButtons()
 
@@ -400,6 +427,7 @@ export function createLabScene(root, hooks = {}) {
       root.removeEventListener('click', onClick)
       root.removeEventListener('keydown', onKeydown)
       root.removeEventListener('pointerdown', onPointerDown)
+      root.removeEventListener('pointerup', onPointerUp)
       if (station) hooks.onStationLeave?.(station)
       closeAllBeakers(true)
     },
