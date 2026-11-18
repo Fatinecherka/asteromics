@@ -107,7 +107,7 @@ ${links}
         <button class="menu-toggle" id="menu-toggle" type="button" aria-expanded="false" aria-controls="nav-drawer" aria-label="Open menu">
           <span class="menu-toggle-bars" aria-hidden="true"></span>
         </button>
-        <button class="toggle" id="tg" type="button" aria-label="Switch color theme">Night</button>
+        <button class="toggle" id="tg" type="button" aria-label="Switch color theme">DARKFIELD</button>
       </div>
     </div>
   </nav>
@@ -209,7 +209,8 @@ function initTheme() {
     const mode = theme === 'day' ? 'brightfield' : 'darkfield'
     root.setAttribute('data-theme', theme)
     root.setAttribute('data-mode', mode)
-    tg.textContent = theme === 'day' ? 'Night' : 'Day'
+    // Label is the mode you switch *to* (matches early paint in index.html)
+    tg.textContent = theme === 'day' ? 'DARKFIELD' : 'BRIGHTFIELD'
     writeStoredTheme(theme)
     microscopeScope?.setMode?.(mode)
   }
