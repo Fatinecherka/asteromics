@@ -47,7 +47,7 @@ export function mark(svg, flat = false) {
         r: ring.size,
         opacity: (0.7 + ri * 0.1).toFixed(2),
       })
-      if (flat) c.setAttribute('fill', '#eef1ee')
+      if (flat) c.setAttribute('fill', '#f1efeb')
       else c.setAttribute('class', 'petal')
       svg.appendChild(c)
     }
@@ -72,7 +72,7 @@ export function mark(svg, flat = false) {
       cy: (Math.sin(a) * rad).toFixed(1),
       r: 3,
     })
-    if (flat) c.setAttribute('fill', '#eef1ee')
+    if (flat) c.setAttribute('fill', '#f1efeb')
     else c.setAttribute('class', 'disc')
     svg.appendChild(c)
   }
@@ -103,7 +103,7 @@ ${links}
         <button class="menu-toggle" id="menu-toggle" type="button" aria-expanded="false" aria-controls="nav-drawer" aria-label="Open menu">
           <span class="menu-toggle-bars" aria-hidden="true"></span>
         </button>
-        <button class="toggle" id="tg" type="button" aria-label="Switch microscopy mode">DARKFIELD</button>
+        <button class="toggle" id="tg" type="button" aria-label="Switch color theme">Night</button>
       </div>
     </div>
   </nav>
@@ -205,7 +205,7 @@ function initTheme() {
     const mode = theme === 'day' ? 'brightfield' : 'darkfield'
     root.setAttribute('data-theme', theme)
     root.setAttribute('data-mode', mode)
-    tg.textContent = theme === 'day' ? 'DARKFIELD' : 'BRIGHTFIELD'
+    tg.textContent = theme === 'day' ? 'Night' : 'Day'
     writeStoredTheme(theme)
     microscopeScope?.setMode?.(mode)
   }

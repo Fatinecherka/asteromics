@@ -1,49 +1,64 @@
-import Lenis from 'lenis'
 import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
-gsap.registerPlugin(ScrollTrigger)
-
-/** @type {import('lenis').default | null} */
-let lenisInstance = null
-/** @type {((time: number) => void) | null} */
-let tickerFn = null
 /** @type {Array<() => void>} */
 let cleanups = []
+/** @type {IntersectionObserver | null} */
+let revealObserver = null
+
+function revealSection(section) {
+  const items = [...section.querySelectorAll('.reveal')]
+  if (!items.length) return
+
+  items.forEach((el) => el.classList.add('is-pending'))
+
+  gsap.fromTo(
+    items,
+    { autoAlpha: 0, y: 22 },
+    {
+      autoAlpha: 1,
+      y: 0,
+      duration: 0.7,
+      ease: 'power2.out',
+      stagger: 0.07,
+      onStart() {
+        items.forEach((el) => el.classList.remove('is-pending'))
+      },
+    },
+  )
+}
 
 function initReveals() {
   const sections = document.querySelectorAll('#app section, #app header.page-hero, #app header.hero')
   const roots = sections.length ? sections : document.querySelectorAll('#app > *')
 
+  if (!window.IntersectionObserver) {
+    roots.forEach((section) => revealSection(section))
+    return
+  }
+
+  revealObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return
+        revealObserver?.unobserve(entry.target)
+        revealSection(entry.target)
+      })
+    },
+    {
+      root: null,
+      rootMargin: '0px 0px -22% 0px',
+      threshold: 0.05,
+    },
+  )
+
   roots.forEach((section) => {
-    const items = section.querySelectorAll('.reveal')
-    if (!items.length) return
-
-    items.forEach((el) => el.classList.add('is-pending'))
-
-    gsap.fromTo(
-      items,
-      { autoAlpha: 0, y: 22 },
-      {
-        autoAlpha: 1,
-        y: 0,
-        duration: 0.7,
-        ease: 'power2.out',
-        stagger: 0.07,
-        scrollTrigger: {
-          trigger: section,
-          start: 'top 78%',
-          once: true,
-        },
-        onStart() {
-          items.forEach((el) => el.classList.remove('is-pending'))
-        },
-      },
-    )
+    if (!section.querySelector('.reveal')) return
+    section.querySelectorAll('.reveal').forEach((el) => el.classList.add('is-pending'))
+    revealObserver.observe(section)
   })
 }
 
-function bindHashLinks(scrollTo) {
+function bindHashLinks() {
   const anchors = document.querySelectorAll('#app a[href^="#"]')
   anchors.forEach((anchor) => {
     const onClick = (e) => {
@@ -52,7 +67,8 @@ function bindHashLinks(scrollTo) {
       const target = document.querySelector(id)
       if (!target) return
       e.preventDefault()
-      scrollTo(target)
+      const top = target.getBoundingClientRect().top + window.scrollY - 72
+      window.scrollTo({ top, behavior: 'smooth' })
     }
     anchor.addEventListener('click', onClick)
     cleanups.push(() => anchor.removeEventListener('click', onClick))
@@ -62,18 +78,9 @@ function bindHashLinks(scrollTo) {
 export function destroyScroll() {
   cleanups.forEach((fn) => fn())
   cleanups = []
-
-  ScrollTrigger.getAll().forEach((t) => t.kill())
-
-  if (tickerFn) {
-    gsap.ticker.remove(tickerFn)
-    tickerFn = null
-  }
-
-  if (lenisInstance) {
-    lenisInstance.destroy()
-    lenisInstance = null
-  }
+  revealObserver?.disconnect()
+  revealObserver = null
+  gsap.killTweensOf('#app .reveal')
 }
 
 export function initScroll() {
@@ -82,54 +89,17 @@ export function initScroll() {
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
   if (reduced) {
-    document.querySelectorAll('#app .reveal').forEach((el) => el.classList.add('is-visible'))
-    return { lenis: null, refresh: () => {} }
+    return { refresh: () => {} }
   }
-
-  const preferNative =
-    window.matchMedia('(pointer: coarse)').matches ||
-    window.matchMedia('(max-width: 900px)').matches
-
-  if (preferNative) {
-    initReveals()
-    bindHashLinks((target) => {
-      const top = target.getBoundingClientRect().top + window.scrollY - 72
-      window.scrollTo({ top, behavior: 'smooth' })
-    })
-    return { lenis: null, refresh: () => ScrollTrigger.refresh() }
-  }
-
-  const lenis = new Lenis({
-    duration: 1.1,
-    smoothWheel: true,
-    touchMultiplier: 1.4,
-  })
-  lenisInstance = lenis
-
-  lenis.on('scroll', ScrollTrigger.update)
-
-  tickerFn = (time) => {
-    lenis.raf(time * 1000)
-  }
-  gsap.ticker.add(tickerFn)
-  gsap.ticker.lagSmoothing(0)
 
   initReveals()
-
-  bindHashLinks((target) => {
-    lenis.scrollTo(target, { offset: -72 })
-  })
+  bindHashLinks()
 
   return {
-    lenis,
-    refresh: () => ScrollTrigger.refresh(),
+    refresh: () => {},
   }
 }
 
 export function scrollToTop() {
-  if (lenisInstance) {
-    lenisInstance.scrollTo(0, { immediate: true })
-    return
-  }
   window.scrollTo(0, 0)
 }
