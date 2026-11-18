@@ -16,7 +16,7 @@
         var tg = document.getElementById("tg");
         if (!tg) return;
         var theme = document.documentElement.getAttribute("data-theme") || "day";
-        tg.textContent = theme === "day" ? "Night" : "Day";
+        tg.textContent = theme === "day" ? "DARKFIELD" : "BRIGHTFIELD";
       }
       if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", syncToggle);
       else syncToggle();

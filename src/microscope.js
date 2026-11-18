@@ -1,6 +1,6 @@
 /**
  * Circular microscope field-of-view with depth-of-field cell layers.
- * Day → brightfield; night → darkfield / fluorescence.
+ * Day → brightfield; night → darkfield.
  */
 
 const LAYER_COUNT = 8
