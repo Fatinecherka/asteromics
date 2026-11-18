@@ -6,6 +6,214 @@ export const meta = {
 
 export const id = 'services'
 
+const NS = 'http://www.w3.org/2000/svg'
+
+function el(name, attrs) {
+  const node = document.createElementNS(NS, name)
+  for (const key in attrs) node.setAttribute(key, attrs[key])
+  return node
+}
+
+function rng(seed) {
+  let s = seed
+  return function next() {
+    s |= 0
+    s = (s + 0x6d2b79f5) | 0
+    let t = Math.imul(s ^ (s >>> 15), 1 | s)
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296
+  }
+}
+
+function gauss(rand) {
+  return (rand() + rand() + rand() + rand() - 2) / 1.4
+}
+
+function paintServiceArt(svg) {
+  const kind = svg.getAttribute('data-art')
+  const W = 320
+  const H = 180
+  const rand = rng(kind.length * 97)
+
+  svg.replaceChildren()
+  svg.appendChild(
+    el('rect', {
+      x: 0,
+      y: 0,
+      width: W,
+      height: H,
+      fill: 'color-mix(in srgb, var(--accent) 12%, var(--surface))',
+    }),
+  )
+
+  if (kind === 'design') {
+    for (let x = 20; x < W; x += 24) {
+      svg.appendChild(
+        el('line', {
+          x1: x,
+          y1: 16,
+          x2: x,
+          y2: H - 16,
+          stroke: 'var(--accent-soft)',
+          opacity: '.22',
+          'stroke-width': 1,
+        }),
+      )
+    }
+    for (let y = 28; y < H; y += 24) {
+      svg.appendChild(
+        el('line', {
+          x1: 16,
+          y1: y,
+          x2: W - 16,
+          y2: y,
+          stroke: 'var(--accent-soft)',
+          opacity: '.22',
+          'stroke-width': 1,
+        }),
+      )
+    }
+    svg.appendChild(
+      el('path', {
+        d: 'M28,138 C78,132 92,74 134,70 S208,104 236,54 S286,38 296,44',
+        fill: 'none',
+        stroke: 'var(--petal)',
+        'stroke-width': 2.4,
+        'stroke-linecap': 'round',
+      }),
+    )
+    ;[
+      [28, 138],
+      [134, 70],
+      [236, 54],
+      [296, 44],
+    ].forEach(([cx, cy]) => {
+      svg.appendChild(
+        el('circle', {
+          cx,
+          cy,
+          r: 6,
+          fill: 'var(--panel-text)',
+          stroke: 'var(--petal)',
+          'stroke-width': 2.4,
+        }),
+      )
+    })
+    svg.appendChild(el('circle', { cx: 188, cy: 80, r: 7, fill: 'var(--gold)' }))
+    return
+  }
+
+  if (kind === 'analysis') {
+    ;[
+      [0.28, 0.42, '#6B5B95', 120],
+      [0.56, 0.3, '#4B3C7E', 110],
+      [0.7, 0.66, '#B06AA8', 100],
+      [0.4, 0.74, '#5C72B8', 80],
+    ].forEach(([fx, fy, fill, n]) => {
+      for (let i = 0; i < n; i += 1) {
+        svg.appendChild(
+          el('circle', {
+            cx: (fx * W + gauss(rand) * 17).toFixed(1),
+            cy: (fy * H + gauss(rand) * 13).toFixed(1),
+            r: (1.2 + rand() * 1.3).toFixed(1),
+            fill,
+            opacity: '.82',
+          }),
+        )
+      }
+    })
+    for (let i = 0; i < 16; i += 1) {
+      svg.appendChild(
+        el('circle', {
+          cx: (0.5 * W + gauss(rand) * 7).toFixed(1),
+          cy: (0.5 * H + gauss(rand) * 6).toFixed(1),
+          r: 2.1,
+          fill: 'var(--gold)',
+        }),
+      )
+    }
+    svg.appendChild(
+      el('path', {
+        d: 'M24,52 L12,90 L24,128',
+        fill: 'none',
+        stroke: 'var(--petal)',
+        'stroke-width': 2.6,
+        'stroke-linecap': 'round',
+        opacity: '.75',
+      }),
+    )
+    svg.appendChild(
+      el('path', {
+        d: 'M296,52 L308,90 L296,128',
+        fill: 'none',
+        stroke: 'var(--petal)',
+        'stroke-width': 2.6,
+        'stroke-linecap': 'round',
+        opacity: '.75',
+      }),
+    )
+    return
+  }
+
+  svg.appendChild(
+    el('rect', {
+      x: 86,
+      y: 20,
+      width: 148,
+      height: 140,
+      rx: 8,
+      fill: 'var(--panel-text)',
+      stroke: 'var(--line)',
+      'stroke-width': 1.6,
+    }),
+  )
+  svg.appendChild(
+    el('rect', {
+      x: 102,
+      y: 36,
+      width: 116,
+      height: 52,
+      rx: 5,
+      fill: 'color-mix(in srgb, var(--accent) 14%, var(--surface))',
+    }),
+  )
+  for (let i = 0; i < 26; i += 1) {
+    svg.appendChild(
+      el('circle', {
+        cx: (102 + 20 + rand() * 76).toFixed(1),
+        cy: (36 + 10 + rand() * 32).toFixed(1),
+        r: (1.4 + rand() * 1.4).toFixed(1),
+        fill: rand() < 0.14 ? 'var(--gold)' : 'var(--accent)',
+        opacity: '.9',
+      }),
+    )
+  }
+  ;[0, 1, 2, 3, 4].forEach((i) => {
+    svg.appendChild(
+      el('rect', {
+        x: 102,
+        y: 100 + i * 12,
+        width: i === 4 ? 62 : 116,
+        height: 5,
+        rx: 2.5,
+        fill: 'var(--accent-soft)',
+        opacity: '.55',
+      }),
+    )
+  })
+  svg.appendChild(el('circle', { cx: 238, cy: 38, r: 11, fill: 'var(--gold)', opacity: '.95' }))
+  svg.appendChild(
+    el('path', {
+      d: 'M233,38 l4,4 l8,-9',
+      fill: 'none',
+      stroke: 'var(--panel)',
+      'stroke-width': 2.4,
+      'stroke-linecap': 'round',
+      'stroke-linejoin': 'round',
+    }),
+  )
+}
+
 const html = `
   <header class="page-hero">
     <div class="wrap">
@@ -19,7 +227,9 @@ const html = `
     <div class="wrap">
       <div class="grid3">
         <div class="card reveal">
-          <p class="card-stage">01</p>
+          <div class="banner">
+            <svg class="art" data-art="design" viewBox="0 0 320 180" aria-hidden="true"></svg>
+          </div>
           <h3>Design</h3>
           <ul>
             <li>Experimental and study design</li>
@@ -29,7 +239,9 @@ const html = `
           </ul>
         </div>
         <div class="card reveal">
-          <p class="card-stage">02</p>
+          <div class="banner">
+            <svg class="art" data-art="analysis" viewBox="0 0 320 180" aria-hidden="true"></svg>
+          </div>
           <h3>Analysis</h3>
           <ul>
             <li>Quality control and preprocessing</li>
@@ -41,7 +253,9 @@ const html = `
           </ul>
         </div>
         <div class="card reveal">
-          <p class="card-stage">03</p>
+          <div class="banner">
+            <svg class="art" data-art="publication" viewBox="0 0 320 180" aria-hidden="true"></svg>
+          </div>
           <h3>Publication</h3>
           <ul>
             <li>Figures prepared to journal specifications</li>
@@ -136,6 +350,8 @@ export function render(container) {
   container.innerHTML = html
 }
 
-export function mount() {}
+export function mount() {
+  document.querySelectorAll('#services .art[data-art]').forEach(paintServiceArt)
+}
 
 export function unmount() {}

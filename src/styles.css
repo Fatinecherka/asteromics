@@ -755,6 +755,26 @@ h2 {
   gap: 32px;
 }
 
+.card {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.card .banner {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  margin-bottom: 18px;
+  background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+  overflow: hidden;
+}
+
+.card .banner svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
 .card h3 {
   font-size: 12px;
   letter-spacing: 0.14em;
@@ -1177,15 +1197,6 @@ footer .wrap {
 
 .inline-link:hover {
   color: var(--gold);
-}
-
-/* ── Service card stages ───────────────────────────────── */
-
-.card-stage {
-  font-size: 11px;
-  letter-spacing: 0.2em;
-  color: var(--accent);
-  margin-bottom: 10px;
 }
 
 /* ── About portrait ────────────────────────────────────── */
