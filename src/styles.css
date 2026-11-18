@@ -615,6 +615,71 @@ h1 {
   }
 }
 
+/* ── Affiliations ─────────────────────────────────────── */
+
+section.affiliations {
+  padding: 64px 0 70px;
+}
+
+.affiliations .shead {
+  text-align: center;
+  max-width: 42rem;
+  margin: 0 auto 36px;
+}
+
+.affiliations .shead h2 {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.affiliations .shead .lede {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.logos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px 28px;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+}
+
+.logo img {
+  height: 40px;
+  width: auto;
+  max-width: 160px;
+  object-fit: contain;
+  flex-shrink: 0;
+  display: block;
+  filter: brightness(0) opacity(0.68);
+}
+
+html[data-theme="night"] .logo img {
+  filter: brightness(0) invert(1) opacity(0.85);
+}
+
+.logo:has(img) span {
+  display: none;
+}
+
+.logo span {
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 17px;
+  font-weight: 400;
+  color: var(--muted);
+  letter-spacing: -0.005em;
+  text-align: center;
+}
+
 /* ── Sections ──────────────────────────────────────────── */
 
 section {

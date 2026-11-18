@@ -42,6 +42,39 @@ const html = `
     </div>
   </header>
 
+  <section id="affiliations" class="affiliations slide-edge">
+    <div class="wrap">
+      <div class="shead">
+        <p class="eyebrow reveal">Affiliations</p>
+        <h2 class="reveal">Collaborations and affiliations</h2>
+        <p class="lede reveal">Work with academic laboratories, research institutes and universities across Europe and the United States.</p>
+      </div>
+      <div class="logos reveal">
+        <div class="logo">
+          <img src="/assets/logos/giga-cancer.svg" alt="GIGA-Cancer" loading="lazy" onerror="this.remove()">
+          <span>GIGA-Cancer</span>
+        </div>
+        <div class="logo">
+          <img src="/assets/logos/uliege.svg" alt="University of Liège" loading="lazy" onerror="this.remove()">
+          <span>University of Liège</span>
+        </div>
+        <div class="logo">
+          <img src="/assets/logos/umaryland.png" alt="University of Maryland, Baltimore" loading="lazy" onerror="this.remove()">
+          <span>University of Maryland, Baltimore</span>
+        </div>
+        <div class="logo">
+          <img src="/assets/logos/vienna.svg" alt="University of Vienna" loading="lazy" onerror="this.remove()">
+          <span>University of Vienna</span>
+        </div>
+        <div class="logo">
+          <img src="/assets/logos/brown.svg" alt="Brown University" loading="lazy" onerror="this.remove()">
+          <span>Brown University</span>
+        </div>
+      </div>
+    </div>
+    <div class="section-aster" aria-hidden="true"><svg class="aster-mark" viewBox="-60 -60 120 120"></svg></div>
+  </section>
+
   <section id="overview" class="slide-edge">
     <div class="wrap">
       <p class="eyebrow reveal">What we do</p>
