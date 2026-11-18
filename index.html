@@ -1,318 +1,160 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="day">
+<html lang="en" data-theme="day" data-mode="brightfield">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AsterOmics</title>
-<meta name="description" content="AsterOmics provides omics data analysis for research laboratories, universities and companies.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
-<style>
-  :root{--max:940px}
-  html[data-theme="day"]{
-    --bg:#EDEAE1; --surface:#FFFFFF; --text:#17161C; --muted:#5F5B67; --line:#D8D4CB;
-    --accent:#6B5B95; --accent-soft:#9C8FC7; --gold:#B7891F;
-    --panel:#17161C; --panel-text:#EDEAE1; --panel-muted:#B4AFC0; --panel-line:rgba(237,234,225,.26);
-    --petal:#6B5B95; --disc:#D9A73E; --stray:#9C8FC7; --nav-bg:rgba(237,234,225,.94);
-  }
-  html[data-theme="night"]{
-    --bg:#141319; --surface:#1B1A21; --text:#EDEAE1; --muted:#A29CAF; --line:#2B2933;
-    --accent:#B3A5D8; --accent-soft:#9C8FC7; --gold:#E0B355;
-    --panel:#1B1A21; --panel-text:#EDEAE1; --panel-muted:#A29CAF; --panel-line:rgba(237,234,225,.16);
-    --petal:#9C8FC7; --disc:#E0B355; --stray:#6B5B95; --nav-bg:rgba(20,19,25,.94);
-  }
-  *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth}
-  body{background:var(--bg);color:var(--text);font-family:"IBM Plex Mono",ui-monospace,monospace;
-       font-size:13.5px;line-height:1.72;transition:background .25s ease,color .25s ease}
-  .wrap{max-width:var(--max);margin:0 auto;padding:0 26px}
-  circle.petal{fill:var(--petal)} circle.disc{fill:var(--disc)} circle.stray{fill:var(--stray)}
-  .on-panel circle.petal{fill:#9C8FC7} .on-panel circle.disc{fill:#D9A73E} .on-panel circle.stray{fill:#6B5B95}
-
-  nav{position:sticky;top:0;z-index:20;background:var(--nav-bg);backdrop-filter:blur(9px);
-      border-bottom:1px solid var(--line)}
-  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;gap:18px}
-  .brand{display:flex;align-items:center;gap:11px}
-  .brand svg{width:27px;height:27px;overflow:visible}
-  .brand .n{font-family:"Fraunces",Georgia,serif;font-size:20px;font-weight:300}
-  .brand .n .o{color:var(--accent)}
-  .navright{display:flex;align-items:center;gap:22px}
-  .links{display:flex;gap:22px;font-size:11.5px;letter-spacing:.07em}
-  .links a{color:var(--muted);text-decoration:none}
-  .links a:hover{color:var(--text)}
-  @media(max-width:760px){.links{display:none}}
-  .toggle{border:1px solid var(--line);background:none;color:var(--muted);border-radius:2px;
-          font-family:inherit;font-size:10px;letter-spacing:.16em;padding:7px 11px;cursor:pointer}
-  .toggle:hover{color:var(--text);border-color:var(--accent)}
-
-  header{background:var(--panel);color:var(--panel-text);padding:96px 0 88px;position:relative;overflow:hidden}
-  header .wrap{position:relative;z-index:2}
-  h1{font-family:"Fraunces",Georgia,serif;font-weight:300;font-size:clamp(33px,6vw,52px);
-     line-height:1.1;letter-spacing:-.012em;max-width:20ch}
-  .sub{color:var(--panel-muted);max-width:56ch;margin-top:22px;font-size:13.5px}
-  .cta{display:inline-flex;margin-top:32px;padding:13px 22px;border:1px solid var(--panel-line);
-       border-radius:2px;color:var(--panel-text);text-decoration:none;font-size:12px;letter-spacing:.12em}
-  .cta:hover{border-color:var(--gold);color:var(--gold)}
-  .hero-mark{position:absolute;right:-70px;top:-40px;width:400px;opacity:.11;z-index:1}
-  @media(max-width:760px){.hero-mark{width:280px;right:-90px;opacity:.09}}
-
-  section{padding:70px 0;border-bottom:1px solid var(--line)}
-  .eyebrow{font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--accent);margin-bottom:15px}
-  h2{font-family:"Fraunces",Georgia,serif;font-weight:300;font-size:clamp(24px,3.8vw,32px);
-     line-height:1.18;margin-bottom:14px;max-width:24ch}
-  .lede{color:var(--muted);max-width:64ch}
-  .after{margin-top:38px}
-
-  .grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(232px,1fr));gap:32px}
-  .card h3{font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;margin-bottom:14px;
-           padding-bottom:11px;border-bottom:1px solid var(--line)}
-  .card ul{list-style:none}
-  .card li{color:var(--muted);font-size:12.5px;padding-left:14px;position:relative;line-height:1.85}
-  .card li::before{content:"";position:absolute;left:0;top:10px;width:4px;height:4px;border-radius:50%;
-                   background:var(--accent-soft)}
-
-  table{width:100%;border-collapse:collapse;font-size:12.5px}
-  td{padding:13px 0;border-bottom:1px solid var(--line);vertical-align:top}
-  td:first-child{width:32%;color:var(--muted);padding-right:18px}
-  tr:last-child td{border-bottom:0}
-
-  .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(216px,1fr));gap:30px}
-  .step .num{font-size:11px;letter-spacing:.2em;color:var(--accent);margin-bottom:10px}
-  .step h3{font-family:"Fraunces",Georgia,serif;font-weight:400;font-size:19px;margin-bottom:8px}
-  .step p{color:var(--muted);font-size:12.5px}
-
-  .panelbox{background:var(--surface);border:1px solid var(--line);border-radius:3px;padding:26px 28px}
-
-  .about{display:grid;grid-template-columns:1.35fr 1fr;gap:42px;align-items:start}
-  @media(max-width:720px){.about{grid-template-columns:1fr}}
-  .about p{color:var(--muted);margin-bottom:14px;max-width:60ch}
-  .facts{border-left:1px solid var(--line);padding-left:22px;font-size:12.5px;line-height:1.95}
-  .facts span{color:var(--muted)}
-  .facts div.k{color:var(--muted);margin-top:14px}
-
-  .contact{background:var(--panel);color:var(--panel-text);padding:80px 0;border:0}
-  .contact h2{color:var(--panel-text)} .contact .lede{color:var(--panel-muted)}
-  .contact .eyebrow{color:#9C8FC7}
-  .mail{font-family:"Fraunces",Georgia,serif;font-weight:300;font-size:clamp(22px,3.8vw,32px);
-        color:var(--panel-text);text-decoration:none;border-bottom:1px solid var(--panel-line);
-        padding-bottom:4px;display:inline-block;margin-top:22px}
-  .mail:hover{color:var(--gold);border-color:var(--gold)}
-  footer{background:var(--panel);color:var(--panel-muted);font-size:11px;padding:24px 0 44px}
-  footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("asteromics-theme");
+        if (t === "day" || t === "night") {
+          document.documentElement.setAttribute("data-theme", t);
+          document.documentElement.setAttribute("data-mode", t === "day" ? "brightfield" : "darkfield");
+        }
+      } catch (e) {}
+      function syncToggle() {
+        var tg = document.getElementById("tg");
+        if (!tg) return;
+        var theme = document.documentElement.getAttribute("data-theme") || "day";
+        tg.textContent = theme === "day" ? "DARKFIELD" : "BRIGHTFIELD";
+      }
+      if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", syncToggle);
+      else syncToggle();
+    })();
+  </script>
+  <title>AsterOmics</title>
+  <meta name="description" content="AsterOmics provides omics data analysis for research laboratories, universities and companies.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="preload" href="/src/styles.css" as="style">
+  <link rel="stylesheet" href="/src/styles.css">
 </head>
 <body>
-
-<nav>
-  <div class="wrap">
-    <div class="brand">
-      <svg id="nm" viewBox="-60 -60 120 120"></svg>
-      <span class="n">Aster<span class="o">O</span>mics</span>
+  <nav>
+    <div class="wrap">
+      <a class="brand" href="index.html" aria-label="AsterOmics home">
+        <svg id="nm" viewBox="-60 -60 120 120" aria-hidden="true"></svg>
+        <span class="n">Aster<span class="o">O</span>mics</span>
+      </a>
+      <div class="navright">
+        <div class="links">
+          <a href="index.html" aria-current="page">Home</a>
+          <a href="services.html">Services</a>
+          <a href="events.html">Events</a>
+          <a href="about.html">About</a>
+          <a href="contact.html">Contact</a>
+        </div>
+        <button class="menu-toggle" id="menu-toggle" type="button" aria-expanded="false" aria-controls="nav-drawer" aria-label="Open menu">
+          <span class="menu-toggle-bars" aria-hidden="true"></span>
+        </button>
+        <button class="toggle" id="tg" type="button" aria-label="Switch microscopy mode">DARKFIELD</button>
+      </div>
     </div>
-    <div class="navright">
-      <div class="links">
-        <a href="#services">Services</a>
-        <a href="#deliverables">Deliverables</a>
-        <a href="#scope">Scope</a>
-        <a href="#engagement">Engagement</a>
-        <a href="#contact">Contact</a>
-      </div>
-      <button class="toggle" id="tg">NIGHT</button>
-    </div>
-  </div>
-</nav>
-
-<header class="on-panel">
-  <svg class="hero-mark" id="hm" viewBox="-60 -60 120 120"></svg>
-  <div class="wrap">
-    <h1>From biological question to omics answer.</h1>
-    <p class="sub">AsterOmics provides omics data analysis for research laboratories, universities and companies. Single cell, spatial, bulk transcriptomics, proteomics, lipidomics and metabolomics.</p>
-    <a class="cta" href="#contact">REQUEST A FIRST CONSULTATION</a>
-  </div>
-</header>
-
-<section id="services">
-  <div class="wrap">
-    <p class="eyebrow">Services</p>
-    <h2>Support at every stage of a project</h2>
-    <p class="lede">Projects can start at any of the three stages below, including after the data has been generated.</p>
-    <div class="grid3 after">
-      <div class="card">
-        <h3>Design</h3>
-        <ul>
-          <li>Experimental and study design</li>
-          <li>Feasibility and sample size assessment</li>
-          <li>Platform and technology selection</li>
-          <li>Analysis plans for grant applications</li>
-        </ul>
-      </div>
-      <div class="card">
-        <h3>Analysis</h3>
-        <ul>
-          <li>Quality control and preprocessing</li>
-          <li>Cell type annotation and clustering</li>
-          <li>Differential expression and abundance</li>
-          <li>Pathway and enrichment analysis</li>
-          <li>Integration across omics layers</li>
-          <li>Re-analysis of public datasets</li>
-        </ul>
-      </div>
-      <div class="card">
-        <h3>Publication</h3>
-        <ul>
-          <li>Figures prepared to journal specifications</li>
-          <li>Methods and statistics sections</li>
-          <li>Review of analytical claims before submission</li>
-          <li>Responses to reviewer comments</li>
-          <li>Revision and resubmission support</li>
-        </ul>
+  </nav>
+  <div class="nav-drawer" id="nav-drawer" hidden>
+    <div class="nav-drawer-backdrop" data-drawer-close></div>
+    <div class="nav-drawer-panel" role="dialog" aria-modal="true" aria-label="Site navigation">
+      <button class="nav-drawer-close" type="button" data-drawer-close aria-label="Close menu">Close</button>
+      <div class="nav-drawer-links">
+        <a href="index.html" aria-current="page">Home</a>
+        <a href="services.html">Services</a>
+        <a href="events.html">Events</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
       </div>
     </div>
   </div>
-</section>
 
-<section id="deliverables">
-  <div class="wrap">
-    <p class="eyebrow">Deliverables</p>
-    <h2>What is provided at the end of a project</h2>
-    <div class="panelbox after">
-      <table>
-        <tr><td>Report</td><td>Written analysis report covering methods, results and analytical decisions.</td></tr>
-        <tr><td>Figures</td><td>Vector files at journal resolution, with the underlying source data.</td></tr>
-        <tr><td>Methods text</td><td>Methods and statistics sections written for direct inclusion in a manuscript.</td></tr>
-        <tr><td>Code</td><td>Version-controlled repository, documented, with pinned package versions and fixed random seeds.</td></tr>
-        <tr><td>Handover</td><td>A walkthrough session so that your team can rerun the analysis independently.</td></tr>
-      </table>
-    </div>
-  </div>
-</section>
-
-<section id="repro">
-  <div class="wrap">
-    <p class="eyebrow">Reproducibility</p>
-    <h2>Analyses that can be rerun and verified</h2>
-    <p class="lede">Every analysis is delivered as code rather than as results alone. Package versions are pinned, environments are documented and random seeds are fixed, so that figures can be regenerated by your team, by a collaborator or by a reviewer.</p>
-  </div>
-</section>
-
-<section id="scope">
-  <div class="wrap">
-    <p class="eyebrow">Scope</p>
-    <h2>Data types, tools and infrastructure</h2>
-    <div class="panelbox after">
-      <table>
-        <tr><td>Data types</td><td>Single cell, spatial, bulk transcriptomics, proteomics, lipidomics, metabolomics, and combinations of these.</td></tr>
-        <tr><td>Platforms</td><td>10x Genomics, Xenium, Visium, mass spectrometry, multiplex imaging.</td></tr>
-        <tr><td>Languages</td><td>R and Python.</td></tr>
-        <tr><td>Infrastructure</td><td>Analyses can be run on our infrastructure or on yours, including institutional clusters.</td></tr>
-      </table>
-    </div>
-  </div>
-</section>
-
-<section id="engagement">
-  <div class="wrap">
-    <p class="eyebrow">Engagement</p>
-    <h2>How a project is set up</h2>
-    <div class="steps after">
-      <div class="step">
-        <div class="num">01</div>
-        <h3>First consultation</h3>
-        <p>A first discussion to define the biological question, the data available or planned, and the objective. Free of charge, with the time it takes.</p>
-      </div>
-      <div class="step">
-        <div class="num">02</div>
-        <h3>Written proposal</h3>
-        <p>Scope, deliverables, timeline and price, agreed in writing before work begins. Fixed price for defined projects, hourly rate for advisory work.</p>
-      </div>
-      <div class="step">
-        <div class="num">03</div>
-        <h3>Delivery</h3>
-        <p>Report, figures, methods text and code repository, followed by a handover session with your team.</p>
+  <header class="hero on-panel" id="hero">
+    <div class="hero-stage" aria-hidden="true">
+      <div class="fov">
+        <canvas id="scope"></canvas>
+        <div class="fov-vignette"></div>
+        <div class="fov-reticle"></div>
+        <div class="fov-hud">
+          <div class="fov-label" id="fov-label">AsterOmics · 40× · Brightfield</div>
+          <div class="fov-scale">
+            <div class="fov-scale-bar"></div>
+            <span>10 μm</span>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</section>
 
-<section id="about">
-  <div class="wrap">
-    <p class="eyebrow">Expertise</p>
-    <div class="about">
-      <div>
-        <h2>Experimental and computational</h2>
-        <p>AsterOmics is led by Fatine Cherkaoui, PhD in Biomedical Sciences, with training in both laboratory work and bioinformatics.</p>
-        <p>Analyses are carried out by a person who knows what happens at the bench. Sample preparation, batch structure and technical artefacts are assessed as part of the analysis rather than treated as background noise.</p>
-        <p>We work with academic laboratories, core facilities and companies, on data they generate and on public datasets.</p>
-      </div>
-      <div class="facts">
-        <div>Fatine Cherkaoui</div>
-        <div><span>PhD in Biomedical Sciences</span></div>
-        <div class="k"><span>Working languages</span></div>
-        <div>English, Français</div>
-        <div class="k"><span>Location</span></div>
-        <div>Belgium, working remotely</div>
-        <div class="k"><span>Contact</span></div>
-        <div>contact@asteromics.com</div>
+    <div class="wrap">
+      <div class="hero-copy is-hidden" id="hero-copy">
+        <h1>From biological question to omics answer.</h1>
+        <p class="sub">AsterOmics provides omics data analysis for research laboratories, universities and companies. Single cell, spatial, bulk transcriptomics, proteomics, lipidomics and metabolomics.</p>
+        <a class="cta" href="contact.html">REQUEST A FIRST CONSULTATION</a>
       </div>
     </div>
-  </div>
-</section>
 
-<section class="contact on-panel" id="contact">
-  <div class="wrap">
-    <p class="eyebrow">Contact</p>
-    <h2>Request a first consultation</h2>
-    <p class="lede">Please include the biological question, the data available or planned, and your deadline.</p>
-    <a class="mail" href="mailto:contact@asteromics.com">contact@asteromics.com</a>
-  </div>
-</section>
+    <div class="hero-controls">
+      <label for="focus">Focus</label>
+      <input id="focus" type="range" min="0" max="100" value="0" aria-label="Rack microscope focus">
+    </div>
+  </header>
 
-<footer>
-  <div class="wrap">
-    <span>&copy; AsterOmics</span>
-    <span>AsterOmics.com</span>
-  </div>
-</footer>
+  <section id="overview" class="slide-edge">
+    <div class="wrap">
+      <p class="eyebrow reveal">What we do</p>
+      <h2 class="reveal">Omics analysis, from design to publication</h2>
+      <p class="lede reveal">Support at every stage of a project — experimental design, computational analysis, and figures ready for a manuscript. Work starts with a free consultation.</p>
+      <div class="grid3 after">
+        <a class="teaser reveal" href="services.html">
+          <h3>Services</h3>
+          <p>Design, analysis and publication support for single-cell, spatial and multi-omics projects.</p>
+          <span class="teaser-go">Explore services →</span>
+        </a>
+        <a class="teaser reveal" href="events.html">
+          <h3>Events</h3>
+          <p>Talks, workshops and meetings — including FeWhale at Impact Hub Antwerp.</p>
+          <span class="teaser-go">See events →</span>
+        </a>
+        <a class="teaser reveal" href="about.html">
+          <h3>About</h3>
+          <p>Led by Fatine Cherkaoui, PhD — experimental and computational training in one practice.</p>
+          <span class="teaser-go">Meet Fatine →</span>
+        </a>
+      </div>
+    </div>
+    <div class="section-aster" aria-hidden="true"><svg class="aster-mark" viewBox="-60 -60 120 120"></svg></div>
+  </section>
 
-<script>
-var NS="http://www.w3.org/2000/svg";
-function el(n,a){var e=document.createElementNS(NS,n);for(var k in a)e.setAttribute(k,a[k]);return e;}
-function rng(s){return function(){s|=0;s=s+0x6D2B79F5|0;var t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
-function gauss(r){return (r()+r()+r()+r()-2)/1.4;}
-function mark(svg,flat){
-  var rings=[{n:8,rad:40,rj:5,size:5.2},{n:8,rad:30,rj:4,size:4.4},{n:5,rad:18,rj:4,size:3.6}];
-  var r=rng(1234);
-  rings.forEach(function(ring,ri){
-    for(var i=0;i<ring.n;i++){
-      var a=ri*0.4+i/ring.n*Math.PI*2, rad=ring.rad+gauss(r)*ring.rj;
-      var c=el("circle",{cx:(Math.cos(a)*rad).toFixed(1),cy:(Math.sin(a)*rad).toFixed(1),
-        r:ring.size,opacity:(0.7+ri*0.1).toFixed(2)});
-      if(flat){c.setAttribute("fill","#EDEAE1");} else {c.setAttribute("class","petal");}
-      svg.appendChild(c);
-    }
-  });
-  if(!flat)[[52,-30],[46,34],[-54,20]].forEach(function(p){
-    var c=el("circle",{cx:p[0],cy:p[1],r:2.6,opacity:.5}); c.setAttribute("class","stray");
-    svg.appendChild(c);
-  });
-  var cr=rng(9);
-  for(var i=0;i<14;i++){
-    var a=cr()*Math.PI*2, rad=cr()*7;
-    var c=el("circle",{cx:(Math.cos(a)*rad).toFixed(1),cy:(Math.sin(a)*rad).toFixed(1),r:3});
-    if(flat){c.setAttribute("fill","#EDEAE1");} else {c.setAttribute("class","disc");}
-    svg.appendChild(c);
-  }
-}
-mark(document.getElementById("nm"),false);
-mark(document.getElementById("hm"),true);
-var tg=document.getElementById("tg");
-tg.addEventListener("click",function(){
-  var root=document.documentElement;
-  var next=root.getAttribute("data-theme")==="day"?"night":"day";
-  root.setAttribute("data-theme",next);
-  tg.textContent = next==="day" ? "NIGHT" : "DAY";
-});
-</script>
+  <section id="newsletter-section" class="slide-edge">
+    <div class="wrap">
+      <div id="newsletter" class="reveal"></div>
+    </div>
+    <div class="section-aster" aria-hidden="true"><svg class="aster-mark" viewBox="-60 -60 120 120"></svg></div>
+  </section>
+
+  <section class="contact on-panel" id="contact-cta">
+    <div class="wrap">
+      <p class="eyebrow reveal">Contact</p>
+      <h2 class="reveal">Request a first consultation</h2>
+      <p class="lede reveal">Please include the biological question, the data available or planned, and your deadline.</p>
+      <a class="mail reveal" href="mailto:contact@asteromics.com">contact@asteromics.com</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <div class="footer-meta">
+        <span>&copy; AsterOmics</span>
+        <span>AsterOmics.com</span>
+      </div>
+      <div class="footer-links">
+        <a href="index.html" aria-current="page">Home</a>
+        <a href="services.html">Services</a>
+        <a href="events.html">Events</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="/src/pages/home.js"></script>
 </body>
 </html>

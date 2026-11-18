@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="day" data-mode="brightfield">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("asteromics-theme");
+        if (t === "day" || t === "night") {
+          document.documentElement.setAttribute("data-theme", t);
+          document.documentElement.setAttribute("data-mode", t === "day" ? "brightfield" : "darkfield");
+        }
+      } catch (e) {}
+      function syncToggle() {
+        var tg = document.getElementById("tg");
+        if (!tg) return;
+        var theme = document.documentElement.getAttribute("data-theme") || "day";
+        tg.textContent = theme === "day" ? "DARKFIELD" : "BRIGHTFIELD";
+      }
+      if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", syncToggle);
+      else syncToggle();
+    })();
+  </script>
+  <title>Services — AsterOmics</title>
+  <meta name="description" content="AsterOmics services: experimental design, omics data analysis, and publication support.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="preload" href="/src/styles.css" as="style">
+  <link rel="stylesheet" href="/src/styles.css">
+</head>
+<body>
+  <nav>
+    <div class="wrap">
+      <a class="brand" href="index.html" aria-label="AsterOmics home">
+        <svg id="nm" viewBox="-60 -60 120 120" aria-hidden="true"></svg>
+        <span class="n">Aster<span class="o">O</span>mics</span>
+      </a>
+      <div class="navright">
+        <div class="links">
+          <a href="index.html">Home</a>
+          <a href="services.html" aria-current="page">Services</a>
+          <a href="events.html">Events</a>
+          <a href="about.html">About</a>
+          <a href="contact.html">Contact</a>
+        </div>
+        <button class="menu-toggle" id="menu-toggle" type="button" aria-expanded="false" aria-controls="nav-drawer" aria-label="Open menu">
+          <span class="menu-toggle-bars" aria-hidden="true"></span>
+        </button>
+        <button class="toggle" id="tg" type="button" aria-label="Switch microscopy mode">DARKFIELD</button>
+      </div>
+    </div>
+  </nav>
+  <div class="nav-drawer" id="nav-drawer" hidden>
+    <div class="nav-drawer-backdrop" data-drawer-close></div>
+    <div class="nav-drawer-panel" role="dialog" aria-modal="true" aria-label="Site navigation">
+      <button class="nav-drawer-close" type="button" data-drawer-close aria-label="Close menu">Close</button>
+      <div class="nav-drawer-links">
+        <a href="index.html">Home</a>
+        <a href="services.html" aria-current="page">Services</a>
+        <a href="events.html">Events</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </div>
+  </div>
+
+  <header class="page-hero">
+    <div class="wrap">
+      <p class="eyebrow">Services</p>
+      <h1>Support at every stage of a project</h1>
+      <p class="lede">Projects can start at any of the three stages below, including after the data has been generated.</p>
+    </div>
+  </header>
+
+  <section id="services" class="slide-edge">
+    <div class="wrap">
+      <div class="grid3">
+        <div class="card reveal">
+          <p class="card-stage">01</p>
+          <h3>Design</h3>
+          <ul>
+            <li>Experimental and study design</li>
+            <li>Feasibility and sample size assessment</li>
+            <li>Platform and technology selection</li>
+            <li>Analysis plans for grant applications</li>
+          </ul>
+        </div>
+        <div class="card reveal">
+          <p class="card-stage">02</p>
+          <h3>Analysis</h3>
+          <ul>
+            <li>Quality control and preprocessing</li>
+            <li>Cell type annotation and clustering</li>
+            <li>Differential expression and abundance</li>
+            <li>Pathway and enrichment analysis</li>
+            <li>Integration across omics layers</li>
+            <li>Re-analysis of public datasets</li>
+          </ul>
+        </div>
+        <div class="card reveal">
+          <p class="card-stage">03</p>
+          <h3>Publication</h3>
+          <ul>
+            <li>Figures prepared to journal specifications</li>
+            <li>Methods and statistics sections</li>
+            <li>Review of analytical claims before submission</li>
+            <li>Responses to reviewer comments</li>
+            <li>Revision and resubmission support</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="section-aster" aria-hidden="true"><svg class="aster-mark" viewBox="-60 -60 120 120"></svg></div>
+  </section>
+
+  <section id="deliverables" class="slide-edge">
+    <div class="wrap">
+      <p class="eyebrow reveal">Deliverables</p>
+      <h2 class="reveal">What is provided at the end of a project</h2>
+      <div class="panelbox after reveal">
+        <table>
+          <tr class="reveal"><td>Report</td><td>Written analysis report covering methods, results and analytical decisions.</td></tr>
+          <tr class="reveal"><td>Figures</td><td>Vector files at journal resolution, with the underlying source data.</td></tr>
+          <tr class="reveal"><td>Methods text</td><td>Methods and statistics sections written for direct inclusion in a manuscript.</td></tr>
+          <tr class="reveal"><td>Code</td><td>Version-controlled repository, documented, with pinned package versions and fixed random seeds.</td></tr>
+          <tr class="reveal"><td>Handover</td><td>A walkthrough session so that your team can rerun the analysis independently.</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="section-aster" aria-hidden="true"><svg class="aster-mark" viewBox="-60 -60 120 120"></svg></div>
+  </section>
+
+  <section id="repro" class="slide-edge">
+    <div class="wrap">
+      <p class="eyebrow reveal">Reproducibility</p>
+      <h2 class="reveal">Analyses that can be rerun and verified</h2>
+      <p class="lede reveal">Every analysis is delivered as code rather than as results alone. Package versions are pinned, environments are documented and random seeds are fixed, so that figures can be regenerated by your team, by a collaborator or by a reviewer.</p>
+    </div>
+    <div class="section-aster" aria-hidden="true"><svg class="aster-mark" viewBox="-60 -60 120 120"></svg></div>
+  </section>
+
+  <section id="scope" class="slide-edge">
+    <div class="wrap">
+      <p class="eyebrow reveal">Scope</p>
+      <h2 class="reveal">Data types, tools and infrastructure</h2>
+      <div class="panelbox after reveal">
+        <table>
+          <tr class="reveal"><td>Data types</td><td>Single cell, spatial, bulk transcriptomics, proteomics, lipidomics, metabolomics, and combinations of these.</td></tr>
+          <tr class="reveal"><td>Platforms</td><td>10x Genomics, Xenium, Visium, mass spectrometry, multiplex imaging.</td></tr>
+          <tr class="reveal"><td>Languages</td><td>R and Python.</td></tr>
+          <tr class="reveal"><td>Infrastructure</td><td>Analyses can be run on our infrastructure or on yours, including institutional clusters.</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="section-aster" aria-hidden="true"><svg class="aster-mark" viewBox="-60 -60 120 120"></svg></div>
+  </section>
+
+  <section id="engagement" class="slide-edge">
+    <div class="wrap">
+      <p class="eyebrow reveal">Engagement</p>
+      <h2 class="reveal">How a project is set up</h2>
+      <div class="steps after">
+        <div class="step reveal">
+          <div class="num">01</div>
+          <h3>First consultation</h3>
+          <p>A first discussion to define the biological question, the data available or planned, and the objective. Free of charge, with the time it takes.</p>
+        </div>
+        <div class="step reveal">
+          <div class="num">02</div>
+          <h3>Written proposal</h3>
+          <p>Scope, deliverables, timeline and price, agreed in writing before work begins. Fixed price for defined projects, hourly rate for advisory work.</p>
+        </div>
+        <div class="step reveal">
+          <div class="num">03</div>
+          <h3>Delivery</h3>
+          <p>Report, figures, methods text and code repository, followed by a handover session with your team.</p>
+        </div>
+      </div>
+    </div>
+    <div class="section-aster" aria-hidden="true"><svg class="aster-mark" viewBox="-60 -60 120 120"></svg></div>
+  </section>
+
+  <section class="contact on-panel">
+    <div class="wrap">
+      <p class="eyebrow reveal">Next step</p>
+      <h2 class="reveal">Request a first consultation</h2>
+      <a class="mail reveal" href="mailto:contact@asteromics.com">contact@asteromics.com</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <div class="footer-meta">
+        <span>&copy; AsterOmics</span>
+        <span>AsterOmics.com</span>
+      </div>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="services.html" aria-current="page">Services</a>
+        <a href="events.html">Events</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="/src/pages/services.js"></script>
+</body>
+</html>
