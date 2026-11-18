@@ -1,6 +1,6 @@
 # AsterOmics
 
-Public website for AsterOmics — omics data analysis consultancy.
+Public website for AsterOmics, an omics data analysis consultancy.
 
 ## Develop
 

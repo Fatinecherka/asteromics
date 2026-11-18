@@ -79,7 +79,7 @@ const html = `
     <div class="wrap">
       <p class="eyebrow reveal">What we do</p>
       <h2 class="reveal">Omics analysis, from design to publication</h2>
-      <p class="lede reveal">Support at every stage of a project — experimental design, computational analysis, and figures ready for a manuscript. Work starts with a free consultation.</p>
+      <p class="lede reveal">Support at every stage of a project: experimental design, computational analysis, and figures ready for a manuscript. Work starts with a free consultation.</p>
       <div class="grid3 after">
         <a class="teaser reveal" href="/services">
           <h3>Services</h3>
@@ -88,12 +88,12 @@ const html = `
         </a>
         <a class="teaser reveal" href="/events">
           <h3>Events</h3>
-          <p>Talks, workshops and meetings — including FeWhale at Impact Hub Antwerp.</p>
+          <p>Talks, workshops and meetings, including FeWhale at Impact Hub Antwerp.</p>
           <span class="teaser-go">See events →</span>
         </a>
         <a class="teaser reveal" href="/about">
           <h3>About</h3>
-          <p>Led by Fatine Cherkaoui, PhD — experimental and computational training in one practice.</p>
+          <p>Led by Fatine Cherkaoui, PhD. Experimental and computational training in one practice.</p>
           <span class="teaser-go">Meet Fatine →</span>
         </a>
       </div>

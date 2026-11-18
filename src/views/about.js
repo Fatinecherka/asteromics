@@ -1,5 +1,5 @@
 export const meta = {
-  title: 'About — AsterOmics',
+  title: 'About | AsterOmics',
   description:
     'AsterOmics is led by Fatine Cherkaoui, PhD in Biomedical Sciences, with training in both laboratory work and bioinformatics.',
 }

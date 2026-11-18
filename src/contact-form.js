@@ -90,7 +90,7 @@ export function mountContactForm(container) {
 
       container.innerHTML = `
         <p class="contact-form-thanks reveal">
-          Thank you — your request was sent. We will reply by email.
+          Thank you. Your request was sent. We will reply by email.
         </p>
       `
     } catch (error) {

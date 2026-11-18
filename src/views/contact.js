@@ -2,7 +2,7 @@ import { mountContactForm } from '../contact-form.js'
 import { mountNewsletter } from '../newsletter.js'
 
 export const meta = {
-  title: 'Contact — AsterOmics',
+  title: 'Contact | AsterOmics',
   description: 'Contact AsterOmics for a first consultation on your omics analysis project.',
 }
 

@@ -1,5 +1,5 @@
 export const meta = {
-  title: 'Services — AsterOmics',
+  title: 'Services | AsterOmics',
   description:
     'AsterOmics services: experimental design, omics data analysis, and publication support.',
 }

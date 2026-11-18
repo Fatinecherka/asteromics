@@ -1,9 +1,9 @@
 import { initEventsSlider } from '../events-slider.js'
 
 export const meta = {
-  title: 'Events — AsterOmics',
+  title: 'Events | AsterOmics',
   description:
-    'AsterOmics talks, workshops and scientific meetings — including FeWhale at Impact Hub Antwerp.',
+    'AsterOmics talks, workshops and scientific meetings, including FeWhale at Impact Hub Antwerp.',
 }
 
 export const id = 'events'
@@ -24,7 +24,7 @@ const html = `
       <p class="lede reveal">
         AsterOmics at
         <a class="inline-link" href="https://antwerp.impacthub.net/fewhale/" target="_blank" rel="noopener">FeWhale</a>,
-        Impact Hub Antwerp — stage, conversations and the company table.
+        Impact Hub Antwerp: stage, conversations and the company table.
       </p>
       <div class="after reveal">
         <div class="slider" id="slider">
@@ -49,7 +49,7 @@ const html = `
             <div class="event-body">
               <h3>FeWhale</h3>
               <p class="event-meta">Impact Hub Antwerp · Company presentation</p>
-              <p class="event-talk">Introducing AsterOmics to founders and researchers —
+              <p class="event-talk">Introducing AsterOmics to founders and researchers.
                 <a class="inline-link" href="https://antwerp.impacthub.net/fewhale/" target="_blank" rel="noopener">antwerp.impacthub.net/fewhale</a>
               </p>
             </div>
