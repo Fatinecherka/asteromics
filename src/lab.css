@@ -1254,6 +1254,18 @@
   color: var(--text);
 }
 
+.lab-desk-notebook .contact-form-status {
+  color: var(--muted);
+}
+
+.lab-desk-notebook .contact-form-status--error {
+  color: #a04848;
+}
+
+.lab-desk-notebook .contact-form-thanks {
+  color: var(--text);
+}
+
 .lab-desk-notebook .mail {
   display: inline-block;
   margin-top: 1.25rem;
